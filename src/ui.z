@@ -1,0 +1,50 @@
+use screen from cwio
+
+class Widget
+    /* @x, @y;;.
+
+    /render ox: int, oy: int;;.
+    /update;;.
+.
+
+class Label from Widget
+    /* ^x, ^y, @text, @color, @font;;.
+
+    /render ox: int, oy: int
+        screen.write(@.text, @.x + ox, @.y + oy, @.color, @.font)
+    .
+.
+
+class SizableWidget
+    /* ^x, ^y, @w, @h;;.
+.
+
+class Container from SizableWidget
+    /* ^x, ^y, ^w, ^h; @.children = [,];.
+
+    /render ox: int, oy: int
+        for w -> @.children
+            w.__render__(@.x + ox, @.y + oy)
+        .
+    .
+
+    def @add(w: Widget): None
+        {@.children}<-w
+    .
+.
+
+class Screen
+    /*; @.children = [,];.
+
+    def @render
+        for w -> @.children
+            w.__render__(0, 0)
+        .
+    .
+
+    def @add(w: Widget): None
+        {@.children}<-w
+    .
+
+    /add w: Widget; <-@.add(w);.
+.
