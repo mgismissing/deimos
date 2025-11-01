@@ -1,4 +1,5 @@
 use * from .font
+use Font    as classwiz_cw  from .classwiz_cw
 use Font    as miniwi       from .miniwi
 use Font    as mojangles    from .mojangles
 use Font    as vcr_osd_mono from .vcr_osd_mono
