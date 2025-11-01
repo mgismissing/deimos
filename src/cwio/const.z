@@ -47,11 +47,15 @@ class SCR
     ===         = 0xF03E UNKNOWN
     ===         = 0xF03F UNKNOWN
     BUFFER      = 0xF800
+    SIZE        = 0x600
+    TRUE_SIZE   = 0x800
 
     WIDTH       = 192
+    WIDTH_B     = 24
     HEIGHT      = 63
     HEADER      = 1
     TRUE_WIDTH  = 256
+    TRUE_WIDTH_B= 32
     TRUE_HEIGHT = 64
 .
 
