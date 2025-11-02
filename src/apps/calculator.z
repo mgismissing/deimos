@@ -14,7 +14,7 @@ def main
         if get
             get = False
             try
-                ans = eval(buf)
+                ans = eval(buf.replace("^", "**"))
                 result = ans
             .catch [SyntaxError, ZeroDivisionError] = e
                 result = e
@@ -54,5 +54,6 @@ def main
             .elif   key == KEYBOARD.KEYS.RPAREN     ; buf += ")";
             .
         .
+        buf .= replace("**", "^")
     .
 .
