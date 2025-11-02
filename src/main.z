@@ -1,8 +1,45 @@
 use * from cwio
+use * from cwio.const
+use Font from cwio.font
 use utime
 use Pin from machine
 use sys
 use os
+use ui
+
+def menu(x: int, y: int, items: list(str), sel: int, font: Font = font.miniwi): None
+    
+.
+
+def choose(items: list(str)): int
+    x = 0
+    y = 0
+    f = font.miniwi
+    h = f!.h
+    for item at i -> items
+        screen.write(item, x+2, (y+(h+1)*i)+1, SCR.ENUM.PIXEL.BLACK, f)
+    .
+    oldsel = None
+    sel = 0
+    while True
+        for item at i -> items
+            if i == sel or i == oldsel
+                screen.box(x, y+(h+1)*i, SCR.WIDTH, h+1, (SCR.ENUM.PIXEL.BLACK if i == sel else SCR.ENUM.PIXEL.WHITE))
+            .
+        .
+        screen.apply!
+        key = keyboard.get_next!
+        if key == KEYBOARD.KEYS.UP
+            oldsel = sel
+            sel -= (1 if sel > 0 else 0)
+        .elif key == KEYBOARD.KEYS.DOWN
+            oldsel = sel
+            sel += (1 if sel < #items-1 else 0)
+        .elif key == KEYBOARD.KEYS.OK
+            <-sel
+        .
+    .
+.
 
 init!
 
@@ -10,14 +47,21 @@ screen.on!
 screen.init!
 keyboard.init!
 
+screen.clear!
+scr = ui.Screen!
+
+scr \
+    + (test1 := ui.Label(0,  0, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", SCR.ENUM.PIXEL.BLACK, font.miniwi)) \
+    + (test1 := ui.Label(2, 10, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", SCR.ENUM.PIXEL.BLACK, font.miniwi)) \
+    + (test2 := ui.Label(5, 20, "ABCDEF", SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)) \
+    + (test3 := ui.Label(0, 40, "ABCDEF", SCR.ENUM.PIXEL.BLACK, font.classwiz_cw))
+
+scr.render!
+screen.apply!
+
 keyboard.wait_for(KEYBOARD.KEYS.EXE)
 
-screen.clear_raw!
-
-for i -> [16<->48]
-    screen.set(i, i, SCR.ENUM.PIXEL.BLACK)
-.
-
-screen.write("HELLO WORLD", 0, 0, SCR.ENUM.PIXEL.BLACK, font.miniwi)
-
 screen.apply!
+
+screen.clear!
+<|choose(["ABCDEFGHIJKLMNOPQRSTUVWXYZ", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"])
