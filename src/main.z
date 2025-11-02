@@ -2,12 +2,15 @@ use * from cwio
 use * from cwio.const
 use Font from cwio.font
 use utime
+use machine
 use Pin from machine
 use sys
 use os
 use ui
 
 def choose(items: list(str)): int
+    screen.clear!
+
     x = 0
     y = 0
     f = font.miniwi
@@ -24,15 +27,18 @@ def choose(items: list(str)): int
             .
         .
         screen.apply!
+        while keyboard.pressed(KEYBOARD.KEYS.OK);;.
         key = keyboard.get_next!
         if key == KEYBOARD.KEYS.UP
             oldsel = sel
-            sel -= (1 if sel > 0 else 0)
+            sel = ($-1) % #items
         .elif key == KEYBOARD.KEYS.DOWN
             oldsel = sel
-            sel += (1 if sel < #items-1 else 0)
+            sel = ($+1) % #items
         .elif key == KEYBOARD.KEYS.OK
             <-sel
+        .elif key == KEYBOARD.KEYS.BACK
+            <- -1
         .
     .
 .
@@ -43,7 +49,6 @@ screen.on!
 screen.init!
 keyboard.init!
 
-screen.clear!
 scr = ui.Screen!
 
 scr \
@@ -52,12 +57,22 @@ scr \
     + (test2 := ui.Label(5, 20, "ABCDEF", SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)) \
     + (test3 := ui.Label(0, 40, "ABCDEF", SCR.ENUM.PIXEL.BLACK, font.classwiz_cw))
 
-scr.render!
-screen.apply!
-
-keyboard.wait_for(KEYBOARD.KEYS.EXE)
-
-screen.apply!
-
-screen.clear!
-<|choose(["ABCDEFGHIJKLMNOPQRSTUVWXYZ", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"])
+while True
+    screen.clear!
+    scr.render!
+    screen.apply!
+    key = keyboard.get_next!
+    if key == KEYBOARD.KEYS.SETTINGS
+        c = choose(["Power", "Debug"])
+        if c == 0
+            c = choose(["Restart", "Reboot"])
+            if c == 0
+                machine.soft_reset!
+            .elif c == 1
+                machine.reset!
+            .
+        .elif c == 1
+            raise KeyboardInterrupt("returning to REPL")
+        .
+    .
+.
