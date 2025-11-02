@@ -7,6 +7,7 @@ use Pin from machine
 use sys
 use os
 use ui
+use res
 
 class DebugInterrupt from Exception;;.
 
@@ -57,16 +58,12 @@ keyboard.init!
 scr = ui.Screen!
 
 scr \
-    + (test1 := ui.Label(2, 50, "ABCDEF", SCR.ENUM.PIXEL.BLACK, font.miniwi)) \
-    + (test2 := ui.Label(0, 0, "abcdefghijklmnopq\nrstuvwxyz\n     w", SCR.ENUM.PIXEL.BLACK, font.classwiz_cw))
+    + (img1 := ui.Image(20, 20, res.img.changed, SCR.ENUM.PIXEL.BLACK))
 
 try
     while True
         screen.clear!
         scr.render!
-        for byte -> {->SCR.WIDTH_B}
-            if byte % 2; screen.set_byte(byte*8, 30, SCR.ENUM.PIXEL.DARK);.
-        .
         screen.apply!
         key = keyboard.get_next!
         if key == KEYBOARD.KEYS.SETTINGS
