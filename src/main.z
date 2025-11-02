@@ -14,7 +14,7 @@ use apps
 class DebugInterrupt from Exception;;.
 
 === debug sleep
-utime.sleep(1)
+utime.sleep(2)
 
 init!
 
@@ -25,7 +25,7 @@ keyboard.init!
 scr = ui.Screen!
 
 scr \
-    + (title    := ui.Label(0, 0, "Welcome to Desmos", SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)) \
+    + (title    := ui.Label(0, 0, "Welcome to Deimos", SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)) \
     + (desc     := ui.Label(0, 14, \
         "This OS is built on PicoEASE, a library that's\n"+\
         "used to access the calculator's debug interface.\n"+\
@@ -33,6 +33,11 @@ scr \
         "addresses that are mapped to external devices\n"+\
         "like the screen and the keyboard.", \
     SCR.ENUM.PIXEL.BLACK, font.miniwi))
+
+applist = [=]
+for app -> apps.all
+    applist[app.name] = app
+.
 
 try
     while True
@@ -57,7 +62,19 @@ try
                 raise DebugInterrupt("Returning to REPL")
             .
         .elif key == KEYBOARD.KEYS.HOME
-
+            c = choose(applist)
+            if c >= 0
+                app = apps.all[c]
+                try
+                    app.main!
+                .catch Exception = e
+                    screen.clear!
+                    screen.write("Tripped and fell", 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
+                    screen.write(e?.__name__ .. ":\n" .. e as str, 0, 14, SCR.ENUM.PIXEL.BLACK, font.miniwi)
+                    screen.apply!
+                    raise e
+                .
+            .
         .
     .
 .catch DebugInterrupt = e
