@@ -7,47 +7,13 @@ use Pin from machine
 use sys
 use os
 use ui
+use choose from ui
 use res
 
 class DebugInterrupt from Exception;;.
 
 === debug sleep
 utime.sleep(1)
-
-def choose(items: list(str)): int
-    screen.clear!
-
-    x = 0
-    y = 0
-    f = font.miniwi
-    h = f!.h
-    for item at i -> items
-        screen.write(item, x+2, (y+(h+1)*i)+1, SCR.ENUM.PIXEL.BLACK, f)
-    .
-    oldsel = None
-    sel = 0
-    while True
-        for item at i -> items
-            if i == sel or i == oldsel
-                screen.box(x, y+(h+1)*i, SCR.WIDTH, h+1, (SCR.ENUM.PIXEL.BLACK if i == sel else SCR.ENUM.PIXEL.WHITE))
-            .
-        .
-        screen.apply!
-        while keyboard.pressed(KEYBOARD.KEYS.OK);;.
-        key = keyboard.get_next!
-        if key == KEYBOARD.KEYS.UP
-            oldsel = sel
-            sel = ($-1) % #items
-        .elif key == KEYBOARD.KEYS.DOWN
-            oldsel = sel
-            sel = ($+1) % #items
-        .elif key == KEYBOARD.KEYS.OK
-            <-sel
-        .elif key == KEYBOARD.KEYS.BACK
-            <- -1
-        .
-    .
-.
 
 init!
 
