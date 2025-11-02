@@ -44,7 +44,8 @@ class Screen
 
     def @add(w: Widget): None
         {@.children}<-w
+        <-@
     .
 
-    /add w: Widget; <-@.add(w);.
+    /add w: Widget; @.add(w); <-@;.
 .
