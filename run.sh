@@ -1,4 +1,4 @@
 flash.sh &&
 mpremote reset &&
-sleep 1 &&
+sleep 2 &&
 mpremote
