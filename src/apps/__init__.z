@@ -1,7 +1,9 @@
 use .calculator
+use .curl
 use .tetris
 
 all = [
     calculator,
+    curl,
     tetris,
 ]

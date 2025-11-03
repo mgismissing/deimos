@@ -1,0 +1,97 @@
+use * from cwio
+use * from cwio.const
+use choose from ui
+use os
+use network
+use WLAN from network
+use urequests
+use time
+
+name = "CURL"
+
+statuses = [
+     0  = "IDLE",
+    -1  = "CONNECTING",
+    -2  = "WRONG_PASSWORD",
+    -3  = "NO_AP_FOUND",
+    -4  = "CONNECT_FAIL",
+     3  = "GOT_IP"
+]
+
+def connect(w: WLAN, ssid: str, psw: str | None): bool
+    w.connect(ssid, psw)
+
+    <|"[WIFI] Connecting to \""..ssid.."\" with"..(" password \""..psw.."\"" if psw else "out password")
+    screen.clear!
+    screen.write("Connecting to \""..ssid.."\"...\n\nNOTE: This operation will automatically time out\nafter 10 seconds if the AP doesn't reply in that\ntime frame.", 0, 0, SCR.ENUM.PIXEL.BLACK, font.miniwi)
+    screen.apply!
+    
+    start = time.ticks_ms!
+    while not w.isconnected!
+        s = w.status!
+
+        if s in [-2, -3, -4,]
+            <|"[WIFI] Error: "..statuses[s]
+            screen.clear!
+            screen.write("Connection error", 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
+            screen.write(statuses[s].."\n\nPress [ANY] to continue...", 0, 14, SCR.ENUM.PIXEL.BLACK, font.miniwi)
+            screen.apply!
+            keyboard.wait!
+            <-False
+        .
+
+        if time.ticks_diff(time.ticks_ms!, start) > 10 * 1000
+            <|"[WIFI] Timed out after 10 seconds"
+            screen.clear!
+            screen.write("Connection error", 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
+            screen.write("Timed out after 10 seconds".."\n\nPress [ANY] to continue...", 0, 14, SCR.ENUM.PIXEL.BLACK, font.miniwi)
+            screen.apply!
+            keyboard.wait!
+            <-False
+        .
+
+        time.sleep(1)
+    .
+    <|"[WIFI] Connected: "..w.ifconfig! as str
+    screen.clear!
+    screen.write("Successfully connected!\nIP: "..w.ifconfig![0] as str.."\n\nPress [ANY] to continue...", 0, 0, SCR.ENUM.PIXEL.BLACK, font.miniwi)
+    screen.apply!
+    keyboard.wait!
+    <-True
+.
+
+def main
+    network.hostname("0xCA510_")
+    w = WLAN(network.STA_IF)
+    w.active(True)
+    === w.config(mac=b"\xDE\xAD\xC0\xDE\x00\x00")
+    while True
+        c = choose(["Connect", "GET"])
+        if c == 0
+            c = choose(["Saved"])
+            if c == 0
+                if not "wifi.txt" in os.listdir("/conf")
+                    with open("/conf/wifi.txt", "x") = _;;.
+                .
+                with open("/conf/wifi.txt", "r") = f
+                    wifis = f.read!.replace("\r\n", "\n").strip("\n").split("\n")
+                .
+                opts = [,]
+                for wifi -> wifis
+                    if wifi == ""; next;.
+                    {opts}<-wifi.split("//", 1)[0]
+                .
+                c = choose(opts)
+                if c >= 0
+                    wifi = wifis[c].split("//", 1)
+                    ssid, psw = wifi[0], (wifi[1] if #wifi > 1 else None)
+                    connect(w, ssid, psw)
+                .
+            .
+        .elif c == 1
+
+        .elif c == -1
+            break
+        .
+    .
+.
