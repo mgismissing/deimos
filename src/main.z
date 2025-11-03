@@ -30,9 +30,21 @@ scr \
         "more info about this project.", \
     SCR.ENUM.PIXEL.BLACK, font.miniwi))
 
-applist = [=]
+applist = [,]
 for app -> apps.all
-    applist[app.name] = app
+    {applist}<-app.name
+.
+
+def run_app(app)
+    try
+        app.main!
+    .catch Exception = e
+        screen.clear!
+        screen.write(e?.__name__, 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
+        screen.write(e as str, 0, 14, SCR.ENUM.PIXEL.BLACK, font.miniwi)
+        screen.apply!
+        raise e
+    .
 .
 
 try
@@ -60,16 +72,7 @@ try
         .elif key == KEYBOARD.KEYS.HOME
             c = choose(applist)
             if c >= 0
-                app = apps.all[c]
-                try
-                    app.main!
-                .catch Exception = e
-                    screen.clear!
-                    screen.write(e?.__name__, 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
-                    screen.write(e as str, 0, 14, SCR.ENUM.PIXEL.BLACK, font.miniwi)
-                    screen.apply!
-                    raise e
-                .
+                run_app(apps.all[c])
             .
         .
     .
