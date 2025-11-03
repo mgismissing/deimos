@@ -154,12 +154,14 @@ def image(img: MonoImage, x: int, y: int, v: int): None
             === get the byte that gets drawn on screen
             === by offsetting the brush by the x offset
             byte = brush >> (8 + ox)
-            === draw the byte on the screen
-            paint_group(x + bx * 8, y + py, 0, byte, True)
-            paint_group(x + bx * 8, y + py, 1, byte, True)
-            === is the brush being cut?
+            === draw the byte on the screen if it contains data
+            if byte
+                paint_group(x + bx * 8, y + py, 0, byte, True)
+                paint_group(x + bx * 8, y + py, 1, byte, True)
+            .
+            === draw the remaining part if it's being cut off by the byte border
             byte = brush >> ox
-            if byte;
+            if byte
                 paint_group(x + (bx+1) * 8, y + py, 0, byte, True)
                 paint_group(x + (bx+1) * 8, y + py, 1, byte, True)
             .
