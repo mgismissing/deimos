@@ -1,0 +1,22 @@
+use * from cwio
+use * from cwio.const
+use wlan from apps.wifi
+use apps.wifi
+use choose from ui
+
+name = "Axios"
+
+def main
+    if (not wlan.active!) or (not wlan.isconnected!)
+        apps.wifi.main!
+        if (not wlan.active!) or (not wlan.isconnected!); <-;.
+    .
+    while True
+        c = choose(["Homework"])
+        if c == 0
+
+        .elif c == -1
+            break
+        .
+    .
+.

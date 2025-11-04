@@ -84,7 +84,7 @@ def main
             if c >= 0
                 wifi = wifis[c].split("//", 1)
                 ssid, psw = wifi[0], (wifi[1] if #wifi > 1 else None)
-                connect(wlan, ssid, psw)
+                if connect(wlan, ssid, psw); break;.
             .
         .elif c == -1
             break
