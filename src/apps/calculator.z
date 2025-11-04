@@ -1,7 +1,89 @@
 use * from cwio
 use * from cwio.const
+use MonoImage from cwio.screen
+use math
 
 name = "Calculator"
+
+class res
+    class img
+        changed = MonoImage(32, 32, bytes([
+            0b11111111,0b11111111,0b11111111,0b11111111,
+            0b11111111,0b11111111,0b11111111,0b11111111,
+            0b11111111,0b11111111,0b11111111,0b11111111,
+            0b11111111,0b10011111,0b11111001,0b11111111,
+            0b11111111,0b01101111,0b10010110,0b11111111,
+            0b11111111,0b01110101,0b01001110,0b11111111,
+            0b11111111,0b01111010,0b01011110,0b11111111,
+            0b11111111,0b01111111,0b11111110,0b11111111,
+            0b11111111,0b01111111,0b11111110,0b11111111,
+            0b11111111,0b01111100,0b00111110,0b11111111,
+            0b11111111,0b01111000,0b00011110,0b11111111,
+            0b11111111,0b01110000,0b00001110,0b11111111,
+            0b11111111,0b01100000,0b00000110,0b11111111,
+            0b11111110,0b01000000,0b00000010,0b01111111,
+            0b11111110,0b10111110,0b01111101,0b01111111,
+            0b11111111,0b00110010,0b01001100,0b11111111,
+            0b11111111,0b10110010,0b01001101,0b11111111,
+            0b11111111,0b01011100,0b00111010,0b11111111,
+            0b11111111,0b00100000,0b00000100,0b11111111,
+            0b11111111,0b10110001,0b10001101,0b11111111,
+            0b11111110,0b00011111,0b11111000,0b01111111,
+            0b11111110,0b11111100,0b00111111,0b01111111,
+            0b11111111,0b01011111,0b11111010,0b11111111,
+            0b11111111,0b10111111,0b10111101,0b11111111,
+            0b11111111,0b01111111,0b11011110,0b11111111,
+            0b11111110,0b11111111,0b00011111,0b01111111,
+            0b11111110,0b00111101,0b01111100,0b01111111,
+            0b11111111,0b01111110,0b01111110,0b11111111,
+            0b11111111,0b01111111,0b11111110,0b11111111,
+            0b11111111,0b11111111,0b11111111,0b11111111,
+            0b11111111,0b11111111,0b11111111,0b11111111,
+            0b11111111,0b11111111,0b11111111,0b11111111,
+        ]))
+    .
+.
+
+def reprover(s: str | None = None)
+    class Function
+        /* @func
+            @.name = s or @.func.__name__
+        .
+        /! *args, **kwargs
+            <-@.func(*args, **kwargs)
+        .
+        /repr; <-@.name;.
+    .
+    def decorator(f)
+        <-Function(f)
+    .
+    <-decorator
+.
+
+class func
+    @reprover("sin")
+    def sin(a: int | float); <-math.sin(math.radians(a));.
+    @reprover("cos")
+    def cos(a: int | float); <-math.cos(math.radians(a));.
+    @reprover("tan")
+    def tan(a: int | float); <-math.tan(math.radians(a));.
+    @reprover("sin\uE011")
+    def asin(a: int | float); <-math.asin(math.radians(a));.
+    @reprover("cos\uE011")
+    def acos(a: int | float); <-math.acos(math.radians(a));.
+    @reprover("tan\uE011")
+    def atan(a: int | float); <-math.atan(math.radians(a));.
+.
+
+replaces = [
+    "^"    = ["^", "**"],
+    "\x01" = ["sin",        "func.sin"  ],
+    "\x02" = ["sin\uE011",  "func.asin" ],
+    "\x03" = ["cos",        "func.cos"  ],
+    "\x04" = ["cos\uE011",  "func.acos" ],
+    "\x05" = ["tan",        "func.tan"  ],
+    "\x06" = ["tan\uE011",  "func.atan" ]
+]
 
 def main
     buf = ""
@@ -10,7 +92,11 @@ def main
     ans = 0
     while True
         screen.clear!
-        screen.write(buf..("=" if get else "|"), 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
+        toprint = buf
+        for k, v -> replaces.items!
+            toprint .= replace(k, v[0])
+        .
+        screen.write(toprint..("=" if get else "|"), 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
         if get
             get = False
             try
@@ -18,23 +104,46 @@ def main
                 .elif   buf == "1+1";   ans = "3";
                 .elif   buf == "6+7";   ans = "67";
                 .elif   buf == "9+10";  ans = "21";
-                .else;  ans = eval(buf.replace("^", "**"))
+                .elif   buf == "9/11";  ans = "2001";
+                .elif   buf == "80085"; ans = "analysis mode";
+                .elif   buf == "71421"; ans = "changed mode"
+                .else
+                    expr = buf
+                    for k, v -> replaces.items!
+                        expr .= replace(k, v[1])
+                    .
+                    <|expr
+                    ans = eval(expr)
                 .
                 result = ans as str
             .catch [SyntaxError, ZeroDivisionError] = e
                 result = e as str
                 if result.startswith("invalid syntax"); result = "invalid syntax";.
+            .catch TypeError = e
+                err = e as str
+                result = "syntax error"
+                if      err.startswith("function takes");;
+                .elif   err.startswith("unsupported types");;
+                .else
+                    raise e
+                .
             .
             screen.write(result, 0, SCR.HEIGHT-14, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
+            if result == "changed mode"
+                screen.image(res.img.changed, SCR.WIDTH-33, SCR.HEIGHT-32, SCR.ENUM.PIXEL.BLACK)
+            .
         .
         screen.apply!
         while keyboard.pressed_any!;;.
         key = keyboard.get_next!
         if      key == KEYBOARD.KEYS.SHIFT      ; shift = not $;
-        .elif   shift
+        .elif shift
             shift = False
             if      key == KEYBOARD.KEYS.LPAREN     ; buf += "=";
             .elif   key == KEYBOARD.KEYS.MULTIPLY   ; buf += "%";
+            .elif   key == KEYBOARD.KEYS.SIN        ; buf += "\x02";
+            .elif   key == KEYBOARD.KEYS.COS        ; buf += "\x04";
+            .elif   key == KEYBOARD.KEYS.TAN        ; buf += "\x06";
             .
         .else
             if      key == KEYBOARD.KEYS.BKSPACE    ; buf = $[:-1];
@@ -59,6 +168,9 @@ def main
             .elif   key == KEYBOARD.KEYS.POWER      ; buf += "^";
             .elif   key == KEYBOARD.KEYS.POWER_2    ; buf += "^2";
             .elif   key == KEYBOARD.KEYS.POWER_10   ; buf += "*10^";
+            .elif   key == KEYBOARD.KEYS.SIN        ; buf += "\x01";
+            .elif   key == KEYBOARD.KEYS.COS        ; buf += "\x03";
+            .elif   key == KEYBOARD.KEYS.TAN        ; buf += "\x05";
             .elif   key == KEYBOARD.KEYS.LPAREN     ; buf += "(";
             .elif   key == KEYBOARD.KEYS.RPAREN     ; buf += ")";
             .
