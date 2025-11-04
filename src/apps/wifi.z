@@ -7,7 +7,10 @@ use WLAN from network
 use urequests
 use time
 
-name = "CURL"
+name = "WiFi"
+
+network.hostname("0xCA510_")
+wlan = WLAN(network.STA_IF)
 
 statuses = [
      0  = "IDLE",
@@ -61,35 +64,28 @@ def connect(w: WLAN, ssid: str, psw: str | None): bool
 .
 
 def main
-    network.hostname("0xCA510_")
-    w = WLAN(network.STA_IF)
-    w.active(True)
-    === w.config(mac=b"\xDE\xAD\xC0\xDE\x00\x00")
+    wlan.active(True)
+    === wlan.config(mac=b"\xDE\xAD\xC0\xDE\x00\x00")
     while True
-        c = choose(["Connect", "GET"])
+        c = choose(["Saved"])
         if c == 0
-            c = choose(["Saved"])
-            if c == 0
-                if not "wifi.txt" in os.listdir("/conf")
-                    with open("/conf/wifi.txt", "x") = _;;.
-                .
-                with open("/conf/wifi.txt", "r") = f
-                    wifis = f.read!.replace("\r\n", "\n").strip("\n").split("\n")
-                .
-                opts = [,]
-                for wifi -> wifis
-                    if wifi == ""; next;.
-                    {opts}<-wifi.split("//", 1)[0]
-                .
-                c = choose(opts)
-                if c >= 0
-                    wifi = wifis[c].split("//", 1)
-                    ssid, psw = wifi[0], (wifi[1] if #wifi > 1 else None)
-                    connect(w, ssid, psw)
-                .
+            if not "wifi.txt" in os.listdir("/conf")
+                with open("/conf/wifi.txt", "x") = _;;.
             .
-        .elif c == 1
-
+            with open("/conf/wifi.txt", "r") = f
+                wifis = f.read!.replace("\r\n", "\n").strip("\n").split("\n")
+            .
+            opts = [,]
+            for wifi -> wifis
+                if wifi == ""; next;.
+                {opts}<-wifi.split("//", 1)[0]
+            .
+            c = choose(opts)
+            if c >= 0
+                wifi = wifis[c].split("//", 1)
+                ssid, psw = wifi[0], (wifi[1] if #wifi > 1 else None)
+                connect(wlan, ssid, psw)
+            .
         .elif c == -1
             break
         .

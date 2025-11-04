@@ -1,9 +1,11 @@
+use .axios
 use .calculator
-use .curl
 use .tetris
+use .wifi
 
 all = [
+    axios,
     calculator,
-    curl,
     tetris,
+    wifi,
 ]
