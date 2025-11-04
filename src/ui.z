@@ -35,6 +35,69 @@ def choose(items: list(str)): int
     .
 .
 
+keypad = [
+    "8" = ["a", "b", "c",],
+    "9" = ["d", "e", "f",],
+    "4" = ["g", "h", "i",],
+    "5" = ["j", "k", "l",],
+    "6" = ["m", "n", "o",],
+    "1" = ["p", "q", "r", "s",],
+    "2" = ["t", "u", "v",],
+    "3" = ["w", "x", "y", "z",],
+    "0" = [" ",]
+]
+
+def ask(msg: str)
+    buf = ""
+    shift = False
+    while True
+        screen.clear!
+        screen.write(msg, 0, 0, SCR.ENUM.PIXEL.BLACK, font.miniwi)
+        screen.write(buf + "|", 0, 8, SCR.ENUM.PIXEL.BLACK, font.miniwi)
+        screen.apply!
+        while keyboard.pressed_any!;;.
+        key = keyboard.get_next!
+        if          key == KEYBOARD.KEYS.SHIFT; shift = not $;
+        .elif       key == KEYBOARD.KEYS.FORMAT
+            last = buf[-1]
+            if last.isdigit!
+                count = 0
+                for c -> buf as reversed
+                    if c != last; break;.
+                    count++
+                .
+                if last in keypad
+                    letters = keypad[last]
+                    if count <= #letters
+                        letter = letters[count-1]
+                        if shift
+                            shift = False
+                            letter .= upper!
+                        .
+                        buf = $[:-count] + letter
+                    .
+                .
+            .
+        .elif shift
+            shift = False
+        .else
+            if      key == KEYBOARD.KEYS.EXE    ; <-buf;
+            .elif   key == KEYBOARD.KEYS.BKSPACE; buf = $[:-1];
+            .elif   key == KEYBOARD.KEYS.N0     ; buf += "0";
+            .elif   key == KEYBOARD.KEYS.N1     ; buf += "1";
+            .elif   key == KEYBOARD.KEYS.N2     ; buf += "2";
+            .elif   key == KEYBOARD.KEYS.N3     ; buf += "3";
+            .elif   key == KEYBOARD.KEYS.N4     ; buf += "4";
+            .elif   key == KEYBOARD.KEYS.N5     ; buf += "5";
+            .elif   key == KEYBOARD.KEYS.N6     ; buf += "6";
+            .elif   key == KEYBOARD.KEYS.N7     ; buf += "7";
+            .elif   key == KEYBOARD.KEYS.N8     ; buf += "8";
+            .elif   key == KEYBOARD.KEYS.N9     ; buf += "9";
+            .
+        .
+    .
+.
+
 class Widget
     /* @x, @y;;.
 
