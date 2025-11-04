@@ -5,6 +5,8 @@ use Font    as mojangles    from .mojangles
 use Font    as vcr_osd_mono from .vcr_osd_mono
 
 all = [
+    classwiz_cw,
     miniwi,
+    mojangles,
     vcr_osd_mono,
 ]
