@@ -1,0 +1,9 @@
+use gc
+
+def collect
+    old = gc.mem_free!
+    gc.collect!
+    new = gc.mem_free!
+    diff = new-old
+    <|"[GRBG] Freed up "..(diff as str).." bytes of space"
+.
