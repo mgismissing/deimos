@@ -1,14 +1,40 @@
-use requests as rq
+use socket
+use ssl
+use garbage
 
 class Session
-    /*
+    /* @host, @port
+        @.s = None
         @.headers = [=]
         @.cookies = [=]
     .
 
-    def @request(method, url, **kwargs)
+    def @_connect
+        addr_info = socket.getaddrinfo(@.host, @.port)[0][-1]
+        s = socket.socket!
+        s.connect(addr_info)
+        s = ssl.wrap_socket(s, server_hostname=@.host)
+        @.s = s
+    .
+
+    def @_close
+        if @.s
+            try; @.s.close!;.
+        .
+        @.s = None
+    .
+
+    def @request(method, url, keepalive=False, getbody=True, data=None, **kwargs)
+        garbage.collect!
+        if not @.s; @._connect!;.
+
         === merge headers
-        headers = @.headers.copy!
+        headers = [
+            "Host" = @.host,
+            "Connection" = "keep-alive",
+            "User-Agent" = "Deimos/1.0"
+        ]
+        headers.update(@.headers)
         if "headers" in kwargs
             headers.update(kwargs["headers"])
             {kwargs:"headers"}->_
@@ -21,23 +47,130 @@ class Session
         .
 
         === make the request
-        resp = rq.request(method, url, headers=headers, **kwargs)
-
-        === save cookies from response (if any)
-        set_cookie = resp.headers.get("Set-Cookie")
-        if set_cookie
-            parts = set_cookie.split(";")[0]
-            k, v = parts.split("=", 1)
-            @.cookies[k.strip!] = v.strip!
+        rq = method.." "..url.." HTTP/1.1\r\n"
+        for k, v -> headers.items!
+            rq += k..": "..v.."\r\n"
         .
-        <-resp
+
+        if data
+            rq += "Content-Length: "..((#data) as str).."\r\n"
+        .
+
+        rq += "\r\n"
+
+        rq .= encode!
+
+        === parse data
+        if data
+            if isinstance(data, str)
+                data .= encode!
+            .
+            rq += data
+        .
+
+        <|rq
+
+        === send the request
+        @.s.write(rq)
+
+        === get the response
+        resp = b""
+        while True
+            chunk = @.s.readline!
+            if not chunk or chunk == b"\r\n"; break;.
+            resp += chunk
+        .
+        resp .= decode!
+        body = b""
+
+        headers = [=]
+        status_line = " -1"
+        for line -> resp.split("\r\n")
+            if ":" in line
+                k, v = line.split(":", 1)
+                headers[k.strip!] = v.strip!
+            .elif line.startswith("HTTP/")
+                status_line = line
+            .
+        .
+        status = int(status_line.split(" ")[1])
+
+        === capture cookies
+        for k, v -> headers.items!
+            if k.lower! == "set-cookie"
+                cookie = v.split(";", 1)[0]
+                ck, cv = cookie.split("=", 1)
+                @.cookies[ck.strip!] = cv.strip!
+            .
+        .
+
+        === determine body reading mode
+        garbage.collect!
+        clen = headers.get("Content-Length")
+        if clen
+            l = clen as int
+            chunk = b""
+            while #chunk < l
+                chunk = self.s.read(l - #chunk)
+            .
+            if getbody; body += chunk;.
+        .elif headers.get("Transfer-Encoding") == "chunked"
+            while True
+                line = @.s.readline!
+                if not line; break;.
+                csize = line.strip!.split(b";")[0]
+                if not csize; next;.
+                csize = int($, 16)
+                if csize == 0
+                    @.s.readline!
+                    break
+                .
+                chunk = b""
+                while #chunk < csize
+                    if getbody
+                        chunk += @.s.read(csize - #chunk)
+                    .else
+                        @.s.read(csize - #chunk)
+                    .
+                .
+                if getbody; body += chunk;.
+                @.s.readline!
+            .
+        .else
+            pass
+            === @.s.settimeout(1)
+            === try
+            ===     while True
+            ===         part = @.s.read(512)
+            ===         if not part; break;.
+            ===         body += part
+            ===     .
+            === .catch OSError;;
+            === .finally
+            ===     @.s.settimeout(5)
+            === .
+        .
+
+        <|"RESP"
+        <|resp
+
+        if not keepalive
+            <|"closing connection"
+            @._close!
+        .
+
+        <-[
+            "status" = status,
+            "headers" = headers,
+            "body" = body,
+            "response" = resp
+        ]
     .
 
     def @get(url, **kwargs); <-@.request("GET", url, **kwargs);.
-    def @post(url, **kwargs); <-@.request("POST", url, **kwargs);.
+    def @post(url, data=None, **kwargs); <-@.request("POST", url, data=data, **kwargs);.
 
     def @close
-        @.headers.clear!
-        @.cookies.clear!
+        <-@._close!
     .
 .
