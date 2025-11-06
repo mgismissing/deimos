@@ -98,6 +98,7 @@ def main
     pos = 0
     get = False
     shift = False
+    tools = False
     while True
         screen.clear!
         toprint1 = buf[:pos]
@@ -109,6 +110,10 @@ def main
             toprint2 .= replace(k, v[0])
         .
         toprint = toprint1 + toprint2
+        if shift; screen.rect(SCR.WIDTH-10, SCR.HEIGHT-8, 5, 8, SCR.ENUM.PIXEL.BLACK);.
+        if tools; screen.rect(SCR.WIDTH-5, SCR.HEIGHT-8, 5, 8, SCR.ENUM.PIXEL.BLACK);.
+        screen.write("S", SCR.WIDTH-9, SCR.HEIGHT-8, (SCR.ENUM.PIXEL.WHITE if shift else SCR.ENUM.PIXEL.BLACK), font.miniwi)
+        screen.write("T", SCR.WIDTH-4, SCR.HEIGHT-8, (SCR.ENUM.PIXEL.WHITE if tools else SCR.ENUM.PIXEL.BLACK), font.miniwi)
         screen.write(toprint..("=" if get else ""), 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
         if not get; screen.write("|", 11*#toprint1, 0, SCR.ENUM.PIXEL.DARK, font.classwiz_cw);.
         if get
@@ -162,19 +167,34 @@ def main
         key = keyboard.get_next!
         chr = None
         mov = 0
-        if          key == KEYBOARD.KEYS.SHIFT      ; shift = not $;
-        .elif shift
+        if          key == KEYBOARD.KEYS.SHIFT
+            shift = not $
+        .elif       key == KEYBOARD.KEYS.TOOLS
+            tools = not $
+        .elif shift and not tools
             shift = False
+            tools = False
             if      key == KEYBOARD.KEYS.LEFT
                 pos = 0
             .elif   key == KEYBOARD.KEYS.RIGHT
                 pos = #buf
             .elif   key == KEYBOARD.KEYS.LPAREN     ; chr = "=";
+            .elif   key == KEYBOARD.KEYS.RPAREN     ; chr = ",";
             .elif   key == KEYBOARD.KEYS.MULTIPLY   ; chr = "%";
             .elif   key == KEYBOARD.KEYS.SIN        ; chr = "\x02()"; mov--;
             .elif   key == KEYBOARD.KEYS.COS        ; chr = "\x04()"; mov--;
             .elif   key == KEYBOARD.KEYS.TAN        ; chr = "\x06()"; mov--;
+            .elif   key == KEYBOARD.KEYS.ADD        ; chr = "\"\""; mov--;
             .
+        .elif tools and not shift
+            tools = False
+            shift = False
+            if      key == KEYBOARD.KEYS.LPAREN     ; chr = "[]"; mov--;
+            .elif   key == KEYBOARD.KEYS.RPAREN     ; chr = "]"; mov--;
+            .
+        .elif shift and tools
+            shift = False
+            tools = False
         .else
             if      key == KEYBOARD.KEYS.BKSPACE
                 if pos > 0
