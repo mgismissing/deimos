@@ -63,7 +63,7 @@ def ask(msg: str)
         while keyboard.pressed_any!;;.
         key = keyboard.get_next!
         if          key == KEYBOARD.KEYS.SHIFT; shift = not $;
-        .elif       key == KEYBOARD.KEYS.FORMAT
+        .elif       key == KEYBOARD.KEYS.FORMAT and #buf
             last = buf[-1]
             if last.isdigit!
                 count = 0
