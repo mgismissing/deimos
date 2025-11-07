@@ -76,21 +76,27 @@ class func
     def atan(a: int | float); <-math.atan(math.radians(a));.
     @reprover("\u221A")
     def sqrt(a: int | float); <-math.sqrt(a);.
+    @reprover("ask")
+    def ask(a: str); <-ui.ask(a as str);.
+    @reprover("sel")
+    def sel(a: list(str)); <-ui.choose(a as list);.
 .
 class var
     ans = 0
 .
 
 replaces = [
-    "\x01" = ["sin",        "func.sin"  ],
-    "\x02" = ["sin\uE011",  "func.asin" ],
-    "\x03" = ["cos",        "func.cos"  ],
-    "\x04" = ["cos\uE011",  "func.acos" ],
-    "\x05" = ["tan",        "func.tan"  ],
-    "\x06" = ["tan\uE011",  "func.atan" ],
-    "\x07" = ["\u221A",     "func.sqrt" ],
-    "\x08" = ["Ans",        "var.ans"   ],
-    "^"    = ["^",          "**"        ]
+    "\uF000" = ["sin",        "func.sin"  ],
+    "\uF001" = ["sin\uE011",  "func.asin" ],
+    "\uF002" = ["cos",        "func.cos"  ],
+    "\uF003" = ["cos\uE011",  "func.acos" ],
+    "\uF004" = ["tan",        "func.tan"  ],
+    "\uF005" = ["tan\uE011",  "func.atan" ],
+    "\uF006" = ["\u221A",     "func.sqrt" ],
+    "\uF007" = ["Ans",        "var.ans"   ],
+    "\uF008" = ["ask",        "func.ask"  ],
+    "\uF009" = ["sel",        "func.sel"  ],
+    "^"      = ["^",          "**"        ]
 ]
 
 def main
@@ -115,7 +121,7 @@ def main
         screen.write("S", SCR.WIDTH-9, SCR.HEIGHT-8, (SCR.ENUM.PIXEL.WHITE if shift else SCR.ENUM.PIXEL.BLACK), font.miniwi)
         screen.write("T", SCR.WIDTH-4, SCR.HEIGHT-8, (SCR.ENUM.PIXEL.WHITE if tools else SCR.ENUM.PIXEL.BLACK), font.miniwi)
         screen.write(toprint..("=" if get else ""), 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
-        if not get; screen.write("|", 11*#toprint1, 0, SCR.ENUM.PIXEL.DARK, font.classwiz_cw);.
+        if not get; screen.write("|", 11*#(toprint1.split("\n")[-1]), 14*toprint1.count("\n"), SCR.ENUM.PIXEL.DARK, font.classwiz_cw);.
         if get
             get = False
             try
@@ -181,20 +187,28 @@ def main
             .elif   key == KEYBOARD.KEYS.LPAREN     ; chr = "=";
             .elif   key == KEYBOARD.KEYS.RPAREN     ; chr = ",";
             .elif   key == KEYBOARD.KEYS.MULTIPLY   ; chr = "%";
-            .elif   key == KEYBOARD.KEYS.SIN        ; chr = "\x02()"; mov--;
-            .elif   key == KEYBOARD.KEYS.COS        ; chr = "\x04()"; mov--;
-            .elif   key == KEYBOARD.KEYS.TAN        ; chr = "\x06()"; mov--;
+            .elif   key == KEYBOARD.KEYS.SIN        ; chr = "\uF001()"; mov--;
+            .elif   key == KEYBOARD.KEYS.COS        ; chr = "\uF003()"; mov--;
+            .elif   key == KEYBOARD.KEYS.TAN        ; chr = "\uF005()"; mov--;
             .elif   key == KEYBOARD.KEYS.ADD        ; chr = "\"\""; mov--;
+            .elif   key == KEYBOARD.KEYS.ANS        ; chr = "\uF008(\"\")"; mov-=2;
             .
         .elif tools and not shift
             tools = False
             shift = False
             if      key == KEYBOARD.KEYS.LPAREN     ; chr = "[]"; mov--;
-            .elif   key == KEYBOARD.KEYS.RPAREN     ; chr = "]"; mov--;
+            .elif   key == KEYBOARD.KEYS.RPAREN     ; chr = "]";
+            .elif   key == KEYBOARD.KEYS.MULTIPLY   ; chr = "!";
+            .elif   key == KEYBOARD.KEYS.DOT        ; chr = ":";
+            .elif   key == KEYBOARD.KEYS.ANS        ; chr = "\uF009([])"; mov-=2;
+            .elif   key == KEYBOARD.KEYS.FORMAT     ; chr = "\\";
+            .elif   key == KEYBOARD.KEYS.EXE        ; chr = "\n";
             .
         .elif shift and tools
             shift = False
             tools = False
+            if      key == KEYBOARD.KEYS.RPAREN     ; chr = ";";
+            .
         .else
             if      key == KEYBOARD.KEYS.BKSPACE
                 if pos > 0
@@ -240,13 +254,13 @@ def main
             .elif   key == KEYBOARD.KEYS.POWER      ; chr = "^";
             .elif   key == KEYBOARD.KEYS.POWER_2    ; chr = "^2";
             .elif   key == KEYBOARD.KEYS.POWER_10   ; chr = "*10^()"; mov--;
-            .elif   key == KEYBOARD.KEYS.SIN        ; chr = "\x01()"; mov--;
-            .elif   key == KEYBOARD.KEYS.COS        ; chr = "\x03()"; mov--;
-            .elif   key == KEYBOARD.KEYS.TAN        ; chr = "\x05()"; mov--;
-            .elif   key == KEYBOARD.KEYS.SQRT       ; chr = "\x07()"; mov--;
+            .elif   key == KEYBOARD.KEYS.SIN        ; chr = "\uF000()"; mov--;
+            .elif   key == KEYBOARD.KEYS.COS        ; chr = "\uF002()"; mov--;
+            .elif   key == KEYBOARD.KEYS.TAN        ; chr = "\uF004()"; mov--;
+            .elif   key == KEYBOARD.KEYS.SQRT       ; chr = "\uF006()"; mov--;
             .elif   key == KEYBOARD.KEYS.LPAREN     ; chr = "()"; mov--;
             .elif   key == KEYBOARD.KEYS.RPAREN     ; chr = ")";
-            .elif   key == KEYBOARD.KEYS.ANS        ; chr = "\x08";
+            .elif   key == KEYBOARD.KEYS.ANS        ; chr = "\uF007";
             .
         .
         if chr
