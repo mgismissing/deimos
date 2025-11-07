@@ -52,13 +52,13 @@ keypad = [
     "0" = [" ",]
 ]
 
-def ask(msg: str)
+def ask(msg: str | None = None)
     buf = ""
     shift = False
     while True
         screen.clear!
-        screen.write(msg, 0, 0, SCR.ENUM.PIXEL.BLACK, font.miniwi)
-        screen.write(buf + "|", 0, 8, SCR.ENUM.PIXEL.BLACK, font.miniwi)
+        if msg; screen.write(msg, 0, 0, SCR.ENUM.PIXEL.BLACK, font.miniwi);.
+        screen.write(buf + "|", 0, (8 if msg else 0), SCR.ENUM.PIXEL.BLACK, font.miniwi)
         screen.apply!
         while keyboard.pressed_any!;;.
         key = keyboard.get_next!

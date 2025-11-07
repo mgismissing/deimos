@@ -191,7 +191,7 @@ def main
             .elif   key == KEYBOARD.KEYS.COS        ; chr = "\uF003()"; mov--;
             .elif   key == KEYBOARD.KEYS.TAN        ; chr = "\uF005()"; mov--;
             .elif   key == KEYBOARD.KEYS.ADD        ; chr = "\"\""; mov--;
-            .elif   key == KEYBOARD.KEYS.ANS        ; chr = "\uF008(\"\")"; mov-=2;
+            .elif   key == KEYBOARD.KEYS.ANS        ; chr = "\uF008()"; mov-=1;
             .
         .elif tools and not shift
             tools = False
