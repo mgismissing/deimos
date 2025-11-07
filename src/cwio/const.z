@@ -59,7 +59,7 @@ class SCR
     TRUE_HEIGHT = 64
 .
 
-class KEYBOARD
+class KB
     class KEYS
         N1      = 0b000_000
         N4      = 0b000_001

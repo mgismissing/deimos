@@ -20,17 +20,17 @@ def choose(items: list(str)): int
             .
         .
         screen.apply!
-        while keyboard.pressed(KEYBOARD.KEYS.OK);;.
+        while keyboard.pressed(KB.KEYS.OK);;.
         key = keyboard.get_next!
-        if key == KEYBOARD.KEYS.UP
+        if key == KB.KEYS.UP
             oldsel = sel
             sel = ($-1) % #items
-        .elif key == KEYBOARD.KEYS.DOWN
+        .elif key == KB.KEYS.DOWN
             oldsel = sel
             sel = ($+1) % #items
-        .elif key == KEYBOARD.KEYS.OK
+        .elif key == KB.KEYS.OK
             <-sel
-        .elif key == KEYBOARD.KEYS.BACK
+        .elif key == KB.KEYS.BACK
             <- -1
         .
     .
@@ -62,8 +62,8 @@ def ask(msg: str | None = None)
         screen.apply!
         while keyboard.pressed_any!;;.
         key = keyboard.get_next!
-        if          key == KEYBOARD.KEYS.SHIFT; shift = not $;
-        .elif       key == KEYBOARD.KEYS.FORMAT and #buf
+        if          key == KB.KEYS.SHIFT; shift = not $;
+        .elif       key == KB.KEYS.FORMAT and #buf
             last = buf[-1]
             if last.isdigit!
                 count = 0
@@ -86,18 +86,18 @@ def ask(msg: str | None = None)
         .elif shift
             shift = False
         .else
-            if      key == KEYBOARD.KEYS.EXE    ; <-buf;
-            .elif   key == KEYBOARD.KEYS.BKSPACE; buf = $[:-1];
-            .elif   key == KEYBOARD.KEYS.N0     ; buf += "0";
-            .elif   key == KEYBOARD.KEYS.N1     ; buf += "1";
-            .elif   key == KEYBOARD.KEYS.N2     ; buf += "2";
-            .elif   key == KEYBOARD.KEYS.N3     ; buf += "3";
-            .elif   key == KEYBOARD.KEYS.N4     ; buf += "4";
-            .elif   key == KEYBOARD.KEYS.N5     ; buf += "5";
-            .elif   key == KEYBOARD.KEYS.N6     ; buf += "6";
-            .elif   key == KEYBOARD.KEYS.N7     ; buf += "7";
-            .elif   key == KEYBOARD.KEYS.N8     ; buf += "8";
-            .elif   key == KEYBOARD.KEYS.N9     ; buf += "9";
+            if      key == KB.KEYS.EXE    ; <-buf;
+            .elif   key == KB.KEYS.BKSPACE; buf = $[:-1];
+            .elif   key == KB.KEYS.N0     ; buf += "0";
+            .elif   key == KB.KEYS.N1     ; buf += "1";
+            .elif   key == KB.KEYS.N2     ; buf += "2";
+            .elif   key == KB.KEYS.N3     ; buf += "3";
+            .elif   key == KB.KEYS.N4     ; buf += "4";
+            .elif   key == KB.KEYS.N5     ; buf += "5";
+            .elif   key == KB.KEYS.N6     ; buf += "6";
+            .elif   key == KB.KEYS.N7     ; buf += "7";
+            .elif   key == KB.KEYS.N8     ; buf += "8";
+            .elif   key == KB.KEYS.N9     ; buf += "9";
             .
         .
     .

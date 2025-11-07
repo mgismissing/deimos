@@ -173,94 +173,94 @@ def main
         key = keyboard.get_next!
         chr = None
         mov = 0
-        if          key == KEYBOARD.KEYS.SHIFT
+        if          key == KB.KEYS.SHIFT
             shift = not $
-        .elif       key == KEYBOARD.KEYS.TOOLS
+        .elif       key == KB.KEYS.TOOLS
             tools = not $
         .elif shift and not tools
             shift = False
             tools = False
-            if      key == KEYBOARD.KEYS.LEFT
+            if      key == KB.KEYS.LEFT
                 pos = 0
-            .elif   key == KEYBOARD.KEYS.RIGHT
+            .elif   key == KB.KEYS.RIGHT
                 pos = #buf
-            .elif   key == KEYBOARD.KEYS.LPAREN     ; chr = "=";
-            .elif   key == KEYBOARD.KEYS.RPAREN     ; chr = ",";
-            .elif   key == KEYBOARD.KEYS.MULTIPLY   ; chr = "%";
-            .elif   key == KEYBOARD.KEYS.SIN        ; chr = "\uF001()"; mov--;
-            .elif   key == KEYBOARD.KEYS.COS        ; chr = "\uF003()"; mov--;
-            .elif   key == KEYBOARD.KEYS.TAN        ; chr = "\uF005()"; mov--;
-            .elif   key == KEYBOARD.KEYS.ADD        ; chr = "\"\""; mov--;
-            .elif   key == KEYBOARD.KEYS.ANS        ; chr = "\uF008()"; mov-=1;
+            .elif   key == KB.KEYS.LPAREN     ; chr = "=";
+            .elif   key == KB.KEYS.RPAREN     ; chr = ",";
+            .elif   key == KB.KEYS.MULTIPLY   ; chr = "%";
+            .elif   key == KB.KEYS.SIN        ; chr = "\uF001()"; mov--;
+            .elif   key == KB.KEYS.COS        ; chr = "\uF003()"; mov--;
+            .elif   key == KB.KEYS.TAN        ; chr = "\uF005()"; mov--;
+            .elif   key == KB.KEYS.ADD        ; chr = "\"\""; mov--;
+            .elif   key == KB.KEYS.ANS        ; chr = "\uF008()"; mov-=1;
             .
         .elif tools and not shift
             tools = False
             shift = False
-            if      key == KEYBOARD.KEYS.LPAREN     ; chr = "[]"; mov--;
-            .elif   key == KEYBOARD.KEYS.RPAREN     ; chr = "]";
-            .elif   key == KEYBOARD.KEYS.MULTIPLY   ; chr = "!";
-            .elif   key == KEYBOARD.KEYS.DOT        ; chr = ":";
-            .elif   key == KEYBOARD.KEYS.ANS        ; chr = "\uF009([])"; mov-=2;
-            .elif   key == KEYBOARD.KEYS.FORMAT     ; chr = "\\";
-            .elif   key == KEYBOARD.KEYS.EXE        ; chr = "\n";
+            if      key == KB.KEYS.LPAREN     ; chr = "[]"; mov--;
+            .elif   key == KB.KEYS.RPAREN     ; chr = "]";
+            .elif   key == KB.KEYS.MULTIPLY   ; chr = "!";
+            .elif   key == KB.KEYS.DOT        ; chr = ":";
+            .elif   key == KB.KEYS.ANS        ; chr = "\uF009([])"; mov-=2;
+            .elif   key == KB.KEYS.FORMAT     ; chr = "\\";
+            .elif   key == KB.KEYS.EXE        ; chr = "\n";
             .
         .elif shift and tools
             shift = False
             tools = False
-            if      key == KEYBOARD.KEYS.RPAREN     ; chr = ";";
+            if      key == KB.KEYS.RPAREN     ; chr = ";";
             .
         .else
-            if      key == KEYBOARD.KEYS.BKSPACE
+            if      key == KB.KEYS.BKSPACE
                 if pos > 0
                     buf = $[:pos-1] + $[pos:]
                     pos -= 1
                 .else
                     buf = $[1:]
                 .
-            .elif   key == KEYBOARD.KEYS.AC
+            .elif   key == KB.KEYS.AC
                 buf = ""
                 pos = 0
-            .elif   key == KEYBOARD.KEYS.LEFT
+            .elif   key == KB.KEYS.LEFT
                 if pos > 0
                     pos -= 1
                 .else
                     pos = #buf
                 .
-            .elif   key == KEYBOARD.KEYS.RIGHT
+            .elif   key == KB.KEYS.RIGHT
                 if pos < #buf
                     pos += 1
                 .else
                     pos = 0
                 .
-            .elif   key == KEYBOARD.KEYS.FORMAT
+            .elif   key == KB.KEYS.FORMAT
                 chr = ui.ask("Insert text")
-            .elif   key == KEYBOARD.KEYS.HOME       ; break;
-            .elif   key == KEYBOARD.KEYS.EXE        ; get = True;
-            .elif   key == KEYBOARD.KEYS.N0         ; chr = "0";
-            .elif   key == KEYBOARD.KEYS.N1         ; chr = "1";
-            .elif   key == KEYBOARD.KEYS.N2         ; chr = "2";
-            .elif   key == KEYBOARD.KEYS.N3         ; chr = "3";
-            .elif   key == KEYBOARD.KEYS.N4         ; chr = "4";
-            .elif   key == KEYBOARD.KEYS.N5         ; chr = "5";
-            .elif   key == KEYBOARD.KEYS.N6         ; chr = "6";
-            .elif   key == KEYBOARD.KEYS.N7         ; chr = "7";
-            .elif   key == KEYBOARD.KEYS.N8         ; chr = "8";
-            .elif   key == KEYBOARD.KEYS.N9         ; chr = "9";
-            .elif   key == KEYBOARD.KEYS.DOT        ; chr = ".";
-            .elif   key == KEYBOARD.KEYS.ADD        ; chr = "+";
-            .elif   key == KEYBOARD.KEYS.SUBTRACT   ; chr = "-";
-            .elif   key == KEYBOARD.KEYS.MULTIPLY   ; chr = "*";
-            .elif   key == KEYBOARD.KEYS.DIVIDE     ; chr = "/";
-            .elif   key == KEYBOARD.KEYS.POWER      ; chr = "^";
-            .elif   key == KEYBOARD.KEYS.POWER_2    ; chr = "^2";
-            .elif   key == KEYBOARD.KEYS.POWER_10   ; chr = "*10^()"; mov--;
-            .elif   key == KEYBOARD.KEYS.SIN        ; chr = "\uF000()"; mov--;
-            .elif   key == KEYBOARD.KEYS.COS        ; chr = "\uF002()"; mov--;
-            .elif   key == KEYBOARD.KEYS.TAN        ; chr = "\uF004()"; mov--;
-            .elif   key == KEYBOARD.KEYS.SQRT       ; chr = "\uF006()"; mov--;
-            .elif   key == KEYBOARD.KEYS.LPAREN     ; chr = "()"; mov--;
-            .elif   key == KEYBOARD.KEYS.RPAREN     ; chr = ")";
-            .elif   key == KEYBOARD.KEYS.ANS        ; chr = "\uF007";
+            .elif   key == KB.KEYS.HOME       ; break;
+            .elif   key == KB.KEYS.EXE        ; get = True;
+            .elif   key == KB.KEYS.N0         ; chr = "0";
+            .elif   key == KB.KEYS.N1         ; chr = "1";
+            .elif   key == KB.KEYS.N2         ; chr = "2";
+            .elif   key == KB.KEYS.N3         ; chr = "3";
+            .elif   key == KB.KEYS.N4         ; chr = "4";
+            .elif   key == KB.KEYS.N5         ; chr = "5";
+            .elif   key == KB.KEYS.N6         ; chr = "6";
+            .elif   key == KB.KEYS.N7         ; chr = "7";
+            .elif   key == KB.KEYS.N8         ; chr = "8";
+            .elif   key == KB.KEYS.N9         ; chr = "9";
+            .elif   key == KB.KEYS.DOT        ; chr = ".";
+            .elif   key == KB.KEYS.ADD        ; chr = "+";
+            .elif   key == KB.KEYS.SUBTRACT   ; chr = "-";
+            .elif   key == KB.KEYS.MULTIPLY   ; chr = "*";
+            .elif   key == KB.KEYS.DIVIDE     ; chr = "/";
+            .elif   key == KB.KEYS.POWER      ; chr = "^";
+            .elif   key == KB.KEYS.POWER_2    ; chr = "^2";
+            .elif   key == KB.KEYS.POWER_10   ; chr = "*10^()"; mov--;
+            .elif   key == KB.KEYS.SIN        ; chr = "\uF000()"; mov--;
+            .elif   key == KB.KEYS.COS        ; chr = "\uF002()"; mov--;
+            .elif   key == KB.KEYS.TAN        ; chr = "\uF004()"; mov--;
+            .elif   key == KB.KEYS.SQRT       ; chr = "\uF006()"; mov--;
+            .elif   key == KB.KEYS.LPAREN     ; chr = "()"; mov--;
+            .elif   key == KB.KEYS.RPAREN     ; chr = ")";
+            .elif   key == KB.KEYS.ANS        ; chr = "\uF007";
             .
         .
         if chr

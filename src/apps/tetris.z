@@ -264,17 +264,17 @@ def main
 
         key = keyboard.get!
         if key >= 0
-            if key == KEYBOARD.KEYS.LEFT
+            if key == KB.KEYS.LEFT
                 if shift_left_if_possible(sel)
                     center[0] -= 1
                 .
-            .elif key == KEYBOARD.KEYS.RIGHT
+            .elif key == KB.KEYS.RIGHT
                 if shift_right_if_possible(sel)
                     center[0] += 1
                 .
-            .elif key == KEYBOARD.KEYS.OK
+            .elif key == KB.KEYS.OK
                 sel = rotate_clockwise_if_possible(sel, buf, center, size)
-            .elif key == KEYBOARD.KEYS.HOME
+            .elif key == KB.KEYS.HOME
                 break
             .
         .

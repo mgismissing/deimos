@@ -53,7 +53,7 @@ try
         scr.render!
         screen.apply!
         key = keyboard.get_next!
-        if key == KEYBOARD.KEYS.SETTINGS
+        if key == KB.KEYS.SETTINGS
             c = choose(["Power", "Debug"])
             if c == 0
                 c = choose(["Restart", "Reboot"])
@@ -69,12 +69,12 @@ try
                 screen.apply!
                 raise DebugInterrupt("Returning to REPL")
             .
-        .elif key == KEYBOARD.KEYS.HOME
+        .elif key == KB.KEYS.HOME
             c = choose(applist)
             if c >= 0
                 run_app(apps.all[c])
             .
-        .elif key == KEYBOARD.KEYS.TOOLS
+        .elif key == KB.KEYS.TOOLS
             ui.choose_file!
         .
     .

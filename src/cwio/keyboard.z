@@ -2,20 +2,20 @@ use .calc
 use * from .const
 
 def init: None
-    calc.write(KEYBOARD.IN_MASK, 0xFF)
-    calc.write(KEYBOARD.OUT_MASK, 0x80)
+    calc.write(KB.IN_MASK, 0xFF)
+    calc.write(KB.OUT_MASK, 0x80)
 .
 
 def pressed_any: bool
-    calc.write(KEYBOARD.OUT, 0b111_1111)
-    <-calc.read(KEYBOARD.IN) != 0xFF
+    calc.write(KB.OUT, 0b111_1111)
+    <-calc.read(KB.IN) != 0xFF
 .
 
 def pressed(code: int): bool
     x = (code & 0b11_1000) >> 3
     y = code & 0b00_0111
-    calc.write(KEYBOARD.OUT, 0b000_0001 << x)
-    <-not (calc.read(KEYBOARD.IN) & (0b000_0001 << y))
+    calc.write(KB.OUT, 0b000_0001 << x)
+    <-not (calc.read(KB.IN) & (0b000_0001 << y))
 .
 
 def wait_for(code: int): None
