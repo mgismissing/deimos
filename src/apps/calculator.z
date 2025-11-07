@@ -233,7 +233,7 @@ def main
                     pos = 0
                 .
             .elif   key == KEYBOARD.KEYS.FORMAT
-                chr = ui.ask("Insert text to insert")
+                chr = ui.ask("Insert text")
             .elif   key == KEYBOARD.KEYS.HOME       ; break;
             .elif   key == KEYBOARD.KEYS.EXE        ; get = True;
             .elif   key == KEYBOARD.KEYS.N0         ; chr = "0";
