@@ -1,12 +1,15 @@
 use os
 
-def remove(path: str, keep: bool = False): None
-    if os.path.isfile(path)
-        os.remove(path)
-        <-
+def isfile(path: str) -> bool
+    <-os.stat(path)[0] & 0x8000
+.
+
+def isdir(path: str) -> bool
+    <-os.stat(path)[0] & 0x4000
+.
+
+def exists(path: str) -> bool
+    try; os.stat(path)  ; <-True;
+    .catch OSError      ; <-False;
     .
-    for child -> os.listdir(path)
-        remove(child)
-    .
-    if keep; os.rmdir(path);.
 .
