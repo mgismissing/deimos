@@ -1,32 +1,44 @@
 use * from cwio
 use os
+use fs
 
-def choose(items: list(str)): int
-    screen.clear!
-
+def choose(items: list(str), msg: str | None = None): int
+    refresh = True
     x = 0
     y = 0
     f = font.miniwi
     h = f!.h
-    for item at i -> items
-        screen.write(item, x+2, (y+(h+2)*i)+1, SCR.ENUM.PIXEL.BLACK, f)
-    .
-    oldsel = None
+    oldsel = 0
     sel = 0
+    oldpage = None
+    page = 0
     while True
-        for item at i -> items
-            if i == sel or i == oldsel
-                screen.box(x, y+(h+2)*i, SCR.WIDTH, h+2, (SCR.ENUM.PIXEL.BLACK if i == sel else SCR.ENUM.PIXEL.WHITE))
+        page = sel // 4
+        curr = items[page*4:(page+1)*4]
+        if oldpage != page
+            oldpage = page
+            refresh = True
+        .
+        if refresh
+            refresh = False
+            screen.clear!
+            if msg; screen.write(msg, 0, 0, SCR.ENUM.PIXEL.BLACK, font.miniwi);.
+            for item at i -> curr
+                screen.write(item, x+2, (y+(h+2)*i)+1+12, SCR.ENUM.PIXEL.BLACK, f)
+            .
+        .
+        for item at i -> curr
+            if i == sel % 4 or i == oldsel % 4
+                screen.box(x, y+(h+2)*i+12, SCR.WIDTH, h+2, (SCR.ENUM.PIXEL.BLACK if i == sel % 4 else SCR.ENUM.PIXEL.WHITE))
             .
         .
         screen.apply!
         while keyboard.pressed(KB.KEYS.OK);;.
         key = keyboard.get_next!
+        oldsel = sel
         if key == KB.KEYS.UP
-            oldsel = sel
             sel = ($-1) % #items
         .elif key == KB.KEYS.DOWN
-            oldsel = sel
             sel = ($+1) % #items
         .elif key == KB.KEYS.OK
             <-sel
@@ -37,7 +49,20 @@ def choose(items: list(str)): int
 .
 
 def choose_file(start: str = "/")
+    curr = os.listdir(start)
+    path = choose(curr, start)
+    if path == -1
+        <- -1
+    .
     
+    path = start..curr[$]
+    if fs.isfile(path)
+        <-path
+    .elif fs.isdir(path)
+        <-choose_file(path.."/")
+    .
+
+    <- -1
 .
 
 keypad = [
