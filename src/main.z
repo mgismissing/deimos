@@ -32,7 +32,7 @@ scr \
 
 applist = [,]
 for app -> apps.all
-    {applist}<-app.name
+    {applist}<-("[LIB] " if hasattr(app, "lib") else "")..app.name
 .
 
 def run_app(app)

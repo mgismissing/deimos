@@ -1,6 +1,7 @@
 use .axios
 use .calculator
 use .editor
+use .rpgm
 use .tetris
 use .viewer
 use .wifi
@@ -9,6 +10,7 @@ all = [
     axios,
     calculator,
     editor,
+    rpgm,
     tetris,
     viewer,
     wifi,

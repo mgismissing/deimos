@@ -1,0 +1,27 @@
+use * from cwio
+use * from cwio.const
+use MonoImage from cwio.screen
+use ui
+
+lib = True
+name = "RPGMaker engine"
+
+class Tilemap
+
+.
+
+class Character
+
+.
+
+class Sprite
+
+.
+
+class Level
+
+.
+
+class Game
+
+.
