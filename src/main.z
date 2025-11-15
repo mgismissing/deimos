@@ -9,7 +9,8 @@ use os
 use ui
 use choose from ui
 use res
-use apps
+use loader
+use apps from loader
 
 class DebugInterrupt from Exception;;.
 
@@ -31,13 +32,14 @@ scr \
     SCR.ENUM.PIXEL.BLACK, font.miniwi))
 
 applist = [,]
-for app -> apps.all
-    {applist}<-("[LIB] " if hasattr(app, "lib") else "")..app.name
+for app -> apps
+    module = app[1]
+    {applist}<-("[LIB] " if hasattr(module, "lib") else "")..module.name
 .
 
 def run_app(app)
     try
-        app.main!
+        loader.run(app)
     .catch Exception = e
         screen.clear!
         screen.write(e?.__name__, 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
@@ -72,7 +74,7 @@ try
         .elif key == KB.KEYS.HOME
             c = choose(applist)
             if c >= 0
-                run_app(apps.all[c])
+                run_app(apps[c][0])
             .
         .elif key == KB.KEYS.TOOLS
             ui.choose_file!

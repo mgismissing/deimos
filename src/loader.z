@@ -1,0 +1,38 @@
+use * from cwio
+use * from cwio.const
+use fs as _fs
+
+class RequireError from Exception;;.
+
+apps = [,]
+for path -> _fs.os.listdir("/apps")
+    if path.endswith(".py") and (not path.startswith("_")) and _fs.isfile("/apps/"+path)
+        name = path[:-3]
+        module = getattr(__import__("apps."+name), name)
+        lib = hasattr(module, "lib")
+        {apps}<-[name, module,]
+        <|"["+("LIBS" if lib else "APPS")+"] Loaded \""+name+"\""
+    .
+.
+
+def get(name: str)
+    for app -> apps
+        if app[0] == name; <-app[1];.
+    .
+    raise NameError("app \""+name+"\" couldn't be found")
+.
+
+def require(name: str)
+    try; <-get(name)
+    .catch NameError;;.
+    screen.clear!
+    screen.write("Missing dependency", 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
+    screen.write("Please install \""+name+"\" to continue", 0, 14, SCR.ENUM.PIXEL.BLACK, font.miniwi)
+    screen.apply!
+    keyboard.wait!
+    raise RequireError(name)
+.
+
+def run(name: str)
+    <-require(name).main!
+.
