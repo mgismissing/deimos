@@ -13,3 +13,11 @@ def exists(path: str): bool
     .catch OSError      ; <-False;
     .
 .
+
+def mkdirs(path: str)
+    part = ""
+    for folder -> path.split("/")
+        part += folder+"/"
+        if not exists(part); os.mkdir(part);.
+    .
+.
