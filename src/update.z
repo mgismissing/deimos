@@ -1,0 +1,53 @@
+use requests as rq
+use tar
+use garbage
+use os
+use gc
+
+class INFO
+    NAME = "official"
+    VER = "1.0.0"
+.
+
+class OFW
+    PROTOCOL = "http"
+    DOMAIN = "github.com"
+    REPO = "mgismissing/deimos"
+.
+
+def download(ver: str = "latest")
+    garbage.collect!
+    <|gc.mem_free!
+    url = OFW.PROTOCOL+"://"+OFW.DOMAIN+"/"+OFW.REPO+"/releases"
+    if ver == "latest"
+        url += "/latest/download"
+    .else
+        url += "/download/"+ver
+    .
+    url += "/deimos.tar"
+    <|url
+    <|gc.mem_free!
+    r = rq.get(url, stream=True)
+    garbage.collect!
+    <|gc.mem_free!
+    with open("/deimos.tar", "wb") = f
+        i = 0
+        while True
+            chunk = r.raw.read(512)
+            if not chunk; break;.
+            <|"Copying chunk "+(i++ as str)
+            f.write(chunk)
+            del chunk
+            <|gc.mem_free!
+        .
+        <|"Done downloading"
+    .
+
+    <|gc.mem_free!
+    r.close!
+    garbage.collect!
+
+    <|"Extracting tar into /"
+    tar.extract("/deimos.tar", "/")
+    os.remove("/deimos.tar")
+.
