@@ -6,22 +6,26 @@ use ui
 lib = True
 name = "RPGMaker engine"
 
-class Tilemap
+class Tile
+    /* @data: MonoImage;;.
+.
 
+class Tilemap
+    /* @w: int, @h: int, @data: list(list(Tile));;.
 .
 
 class Character
-
+    /* @up: MonoImage, @down: MonoImage, @left: MonoImage, @right: MonoImage;;.
 .
 
 class Sprite
-
+    /* @x: int, @y: int, @dir: int, @chr: Character;;.
 .
 
 class Level
-
+    /* @w: int, @h: int, @tm: Tilemap;;.
 .
 
 class Game
-
+    /* @lvs: list(Level);;.
 .
