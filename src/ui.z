@@ -1,6 +1,7 @@
 use * from cwio
 use os
 use fs
+use res
 
 def notify(title: str, msg: str, wait: bool = True)
     screen.clear!
@@ -32,12 +33,15 @@ def choose(items: list(str), msg: str | None = None): int
             screen.clear!
             if msg; screen.write(msg, 0, 0, SCR.ENUM.PIXEL.BLACK, font.miniwi);.
             for item at i -> curr
-                screen.write(item, x+2, (y+(h+2)*i)+1+12, SCR.ENUM.PIXEL.BLACK, f)
+                ix = x+2
+                iy = (y+(h+2)*i)+12
+                screen.image(res.ui.circled(i+1), ix, iy, SCR.ENUM.PIXEL.BLACK)
+                screen.write(item, ix+12, iy+1, SCR.ENUM.PIXEL.BLACK, f)
             .
         .
         for item at i -> curr
             if i == sel % 4 or i == oldsel % 4
-                screen.box(x, y+(h+2)*i+12, SCR.WIDTH, h+2, (SCR.ENUM.PIXEL.BLACK if i == sel % 4 else SCR.ENUM.PIXEL.WHITE))
+                screen.box(x+12, y+(h+2)*i+12, SCR.WIDTH-12, h+2, (SCR.ENUM.PIXEL.BLACK if i == sel % 4 else SCR.ENUM.PIXEL.WHITE))
             .
         .
         screen.apply!
@@ -48,10 +52,22 @@ def choose(items: list(str), msg: str | None = None): int
             sel = ($-1) % #items
         .elif key == KB.KEYS.DOWN
             sel = ($+1) % #items
+        .elif key == KB.KEYS.PG_UP
+            sel = ($-4) % #items
+        .elif key == KB.KEYS.PG_DOWN
+            sel = ($+4) % #items
         .elif key == KB.KEYS.OK
             <-sel
         .elif key == KB.KEYS.BACK
             <- -1
+        .elif key == KB.KEYS.N1
+            <-page*4
+        .elif key == KB.KEYS.N2
+            <-page*4+1
+        .elif key == KB.KEYS.N3
+            <-page*4+2
+        .elif key == KB.KEYS.N4
+            <-page*4+3
         .
     .
 .
