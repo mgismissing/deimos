@@ -46,7 +46,7 @@ def protected_run(func)
         <-func!
     .catch loader.Error;
     .catch Exception = e
-        ui.notify(e?.__name__, e as str, wait=-)
+        ui.notify("Python error", (e?.__name__)+":\n"+(e as str), res.ui.error, wait=-)
         raise e
     .
 .
@@ -68,22 +68,25 @@ try
                 if wifi.support
                     if wifi.choose_connect!
                         ui.notify(
-                            "Updating...",
+                            "Updating",
                             "OS will be restarted automatically after the\nupdate.",
+                            res.ui.info,
                             wait=-
                         )
                         protected_run(update.download)
                         machine.reset!
                     .else
                         ui.notify(
-                            "Connection error",
-                            "A stable Internet connection is required to\nperform updates."
+                            "No connection",
+                            "A stable Internet connection is required to\nperform updates.",
+                            res.ui.error
                         )
                     .
                 .else
                     ui.notify(
                         "No WiFi support",
-                        "WiFi support is required to perform updates."
+                        "WiFi support is required to perform updates.",
+                        res.ui.error
                     )
                 .
             .elif c == 1
@@ -92,7 +95,8 @@ try
                 .else
                     ui.notify(
                         "No WiFi support",
-                        "WiFi support is required to connect to a\nnetwork."
+                        "WiFi support is required to connect to a\nnetwork.",
+                        res.ui.error
                     )
                 .
             .elif c == 2
@@ -106,6 +110,7 @@ try
                 ui.notify(
                     "Debug mode",
                     "Control has been redirected to USB",
+                    res.ui.info,
                     wait=-
                 )
                 raise DebugInterrupt("Returning to REPL")

@@ -1,6 +1,7 @@
 use * from cwio
 use * from cwio.const
 use ui
+use res
 use os
 use time
 
@@ -47,8 +48,9 @@ if support
             if s in [-2, -3, -4,]
                 <|"[WIFI] Error: "..statuses[s]
                 ui.notify(
-                    "Connection error",
-                    statuses[s].."\n\nPress [ANY] to continue..."
+                    "No connection",
+                    statuses[s].."\n\nPress [ANY] to continue...",
+                    res.ui.error
                 )
                 <-False
             .
@@ -56,8 +58,9 @@ if support
             if time.ticks_diff(time.ticks_ms!, start) > 15 * 1000
                 <|"[WIFI] Timed out after 15 seconds"
                 ui.notify(
-                    "Connection error",
-                    "Timed out after 15 seconds".."\n\nPress [ANY] to continue..."
+                    "No connection",
+                    "Timed out after 15 seconds".."\n\nPress [ANY] to continue...",
+                    res.ui.error
                 )
                 <-False
             .

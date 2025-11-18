@@ -1,5 +1,5 @@
 use .calc
-use * from .const
+use .const
 use .screen
 use .keyboard
 use sleep_ms from time

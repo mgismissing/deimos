@@ -3,6 +3,7 @@ use * from cwio.const
 use os
 use fs
 use ui
+use res
 use support as wifi_support from wifi
 
 class Error from Exception;;.
@@ -34,8 +35,9 @@ def require(name: str)
     try; <-get(name)
     .catch NameError;;.
     ui.notify(
-        "Missing dependency",
-        "Please install \""+name+"\" to continue"
+        "Missing library",
+        "Please install \""+name+"\" to continue",
+        res.ui.error
     )
     raise RequireError(name)
 .
@@ -45,7 +47,8 @@ def run(name: str)
     if (not wifi_support) and ("wifi" in getattr(app, "requires", [,]))
         ui.notify(
             "Unsupported app",
-            "This app requires WiFi, which isn't supported\nby this device."
+            "This app requires WiFi, which isn't supported\nby this device.",
+            res.ui.error
         )
         raise UnsupportedError("wifi")
     .
@@ -57,12 +60,14 @@ def run(name: str)
     if lib
         ui.notify(
             "Library app",
-            "This library is only meant to be used by other\napps."
+            "This library is only meant to be used by other\napps.",
+            res.ui.error
         )
     .else
         ui.notify(
-            "Missing entry point",
-            "This application cannot be launched directly."
+            "Missing entry",
+            "This application cannot be launched directly.",
+            res.ui.error
         )
     .
     raise EntryPointError(lib)

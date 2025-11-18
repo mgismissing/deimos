@@ -1,12 +1,19 @@
 use * from cwio
+use * from cwio.const
+use MonoImage from cwio.screen
 use os
 use fs
 use res
 
-def notify(title: str, msg: str, wait: bool = True)
+def notify(title: str, msg: str, icon: MonoImage | None = None, wait: bool = True)
     screen.clear!
-    screen.write(title, 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
-    screen.write(msg, 0, 14, SCR.ENUM.PIXEL.BLACK, font.miniwi)
+    if icon
+        screen.image(icon, 0, 0, SCR.ENUM.PIXEL.BLACK)
+        screen.write(title, 26, 6, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
+    .else
+        screen.write(title, 0, 6, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
+    .
+    screen.write(msg, 0, 24, SCR.ENUM.PIXEL.BLACK, font.miniwi)
     screen.apply!
     if wait; keyboard.wait!;.
 .
