@@ -92,7 +92,7 @@ try
                     keyboard.wait!
                 .
             .elif c == 1
-                c = choose(["Restart", "Reboot"])
+                c = choose(["Reset environment", "Reboot"])
                 if c == 0
                     machine.soft_reset!
                 .elif c == 1
