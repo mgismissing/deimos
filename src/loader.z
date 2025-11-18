@@ -56,10 +56,10 @@ def run(name: str)
     lib = hasattr(app, "lib")
     screen.clear!
     if lib
-        screen.write("Passive library app", SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
+        screen.write("Passive library app", 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
         screen.write("This library is only meant to be used by other\napps.", 0, 14, SCR.ENUM.PIXEL.BLACK, font.miniwi)
     .else
-        screen.write("Missing entry point", SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
+        screen.write("Missing entry point", 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
         screen.write("This application cannot be launched directly.", 0, 14, SCR.ENUM.PIXEL.BLACK, font.miniwi)
     .
     screen.apply!
