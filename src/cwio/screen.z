@@ -94,34 +94,48 @@ def apply: None
 .
 
 def line_h(x: int, y: int, l: int, v: int)
+    draw = False
     s = 0
     rx = x
     rl = x+l
     while rx < rl
-        if s == 0
-            if rx % 8
+        if not draw
+            draw = in_bounds(rx, y)
+        .
+        if draw
+            if not in_bounds(rx, y); <-;.
+            if s == 0
+                if rx % 8
+                    set(rx, y, v)
+                    rx += 1
+                .else
+                    s = 1
+                .
+            .elif s == 1
+                if rl-rx >= 8
+                    set_byte(rx, y, v)
+                    rx += 8
+                .else
+                    s = 2
+                .
+            .else
                 set(rx, y, v)
                 rx += 1
-            .else
-                s = 1
             .
-        .elif s == 1
-            if rl-rx >= 8
-                set_byte(rx, y, v)
-                rx += 8
-            .else
-                s = 2
-            .
-        .else
-            set(rx, y, v)
-            rx += 1
         .
     .
 .
 
 def line_v(x: int, y: int, l: int, v: int)
+    draw = False
     for oy -> {->l}
-        set(x, y+oy, v)
+        if not draw
+            draw = in_bounds(x, y+oy)
+        .
+        if draw
+            if not in_bounds(x, y+oy); <-;.
+            set(x, y+oy, v)
+        .
     .
 .
 
@@ -133,8 +147,15 @@ def box(x: int, y: int, w: int, h: int, v: int)
 .
 
 def rect(x: int, y: int, w: int, h: int, v: int)
+    draw = False
     for oy -> {->h}
-        line_h(x, y+oy, w, v)
+        if not draw
+            draw = in_bounds(x, y+oy)
+        .
+        if draw
+            if not in_bounds(x, y+oy); <-;.
+            line_h(x, y+oy, w, v)
+        .
     .
 .
 
@@ -145,35 +166,42 @@ class Image
 class MonoImage from Image;;.
 
 def image(img: MonoImage, x: int, y: int, v: int): None
+    draw = False
     === start of previous x byte
     xb = x//8
     === actual row size in bytes
     wb = ((img.w+7)&~7)//8
     for py -> {->img.h}
-        for bx -> {->wb}
-            === x offset from last byte
-            ox = x % 8
-            === current byte's address in font data
-            r = py * wb + bx
-            === previous, current and next bytes in row
-            prevb = (0x00 if bx == 0 else img.data[r-1])
-            currb = img.data[r]
-            nextb = (0x00 if bx == wb-1 else img.data[r+1])
-            === generate brush by merging all 3 bytes next to each other
-            brush = (prevb << 16) | (currb << 8) | nextb
-            === get the byte that gets drawn on screen
-            === by offsetting the brush by the x offset
-            byte = brush >> (8 + ox)
-            === draw the byte on the screen if it contains data
-            if byte
-                paint_group(x + bx * 8, y + py, 0, byte, v & SCR.ENUM.PIXEL.BRIGHT)
-                paint_group(x + bx * 8, y + py, 1, byte, v & SCR.ENUM.PIXEL.DARK)
-            .
-            === draw the remaining part if it's being cut off by the byte border
-            byte = brush >> ox
-            if byte
-                paint_group(x + (bx+1) * 8, y + py, 0, byte, v & SCR.ENUM.PIXEL.BRIGHT)
-                paint_group(x + (bx+1) * 8, y + py, 1, byte, v & SCR.ENUM.PIXEL.DARK)
+        if not draw
+            draw = in_bounds(0, y+py)
+        .
+        if draw
+            if not in_bounds(0, y+py); <-;.
+            for bx -> {->wb}
+                === x offset from last byte
+                ox = x % 8
+                === current byte's address in font data
+                r = py * wb + bx
+                === previous, current and next bytes in row
+                prevb = (0x00 if bx == 0 else img.data[r-1])
+                currb = img.data[r]
+                nextb = (0x00 if bx == wb-1 else img.data[r+1])
+                === generate brush by merging all 3 bytes next to each other
+                brush = (prevb << 16) | (currb << 8) | nextb
+                === get the byte that gets drawn on screen
+                === by offsetting the brush by the x offset
+                byte = brush >> (8 + ox)
+                === draw the byte on the screen if it contains data
+                if byte
+                    paint_group(x + bx * 8, y + py, 0, byte, v & SCR.ENUM.PIXEL.BRIGHT)
+                    paint_group(x + bx * 8, y + py, 1, byte, v & SCR.ENUM.PIXEL.DARK)
+                .
+                === draw the remaining part if it's being cut off by the byte border
+                byte = brush >> ox
+                if byte
+                    paint_group(x + (bx+1) * 8, y + py, 0, byte, v & SCR.ENUM.PIXEL.BRIGHT)
+                    paint_group(x + (bx+1) * 8, y + py, 1, byte, v & SCR.ENUM.PIXEL.DARK)
+                .
             .
         .
     .
