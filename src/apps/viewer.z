@@ -10,7 +10,7 @@ def main
     raw = ui.choose_file!
     screen.clear!
     with open(raw, "rb") = f
-        screen.image(MonoImage(192, 62, f.read!), 0, 0, SCR.ENUM.PIXEL.BLACK)
+        screen.image(MonoImage(192, 63, f.read!), 0, 0, SCR.ENUM.PIXEL.BLACK)
     .
     screen.apply!
     keyboard.wait!
