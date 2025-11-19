@@ -3,6 +3,33 @@ use * from .const
 use Font from .font
 use utime
 
+class Buffer
+    /* items
+        @.items = bytearray(items)
+    .
+    /getitem index
+        try
+            <-@.items[index]
+        .catch IndexError
+            <-0x00
+        .
+    .
+    /setitem index, value
+        try
+            @.items[index] = value
+        .catch IndexError;;.
+    .
+    /len
+        <-#@.items
+    .
+    /repr
+        <-@.items as repr
+    .
+    /str
+        <-@.items as str
+    .
+.
+
 def on: None
     calc.write(SCR.POWER, SCR.ENUM.POWER.RESET)
     utime.sleep_ms(2)
@@ -17,8 +44,8 @@ def init: None
 .
 
 empty = [
-    (b"\x00" * (SCR.SIZE-SCR.HEADER*SCR.WIDTH_B)) as bytearray,
-    (b"\x00" * (SCR.SIZE-SCR.HEADER*SCR.WIDTH_B)) as bytearray,
+    (b"\x00" * (SCR.SIZE-SCR.HEADER*SCR.WIDTH_B)) as Buffer,
+    (b"\x00" * (SCR.SIZE-SCR.HEADER*SCR.WIDTH_B)) as Buffer,
 ]
 oldbuf = None
 buf = [empty[0][0:], empty[1][0:],]
