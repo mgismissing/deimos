@@ -29,7 +29,7 @@ scr = ui.Screen!
 scr \
     + (title    := ui.Label(0, 0, "Welcome to Deimos", SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)) \
     + (desc     := ui.Label(0, 20, \
-        "Press HOME for a list of apps.\n"+\
+        "Press ALPHA for a list of apps.\n"+\
         "\n"+\
         "Go to https://github.com/mgismissing/deimos for\n"+\
         "more info about this project.", \
