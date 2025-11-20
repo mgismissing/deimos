@@ -60,14 +60,14 @@ def set_raw(x: int, y: int, pl: int, v: bool)
 
 def set(x: int, y: int, v: int): None
     if not in_bounds(x, y); <-;.
-    set_raw(x, y, 0, v & SCR.ENUM.PIXEL.BRIGHT)
-    set_raw(x, y, 1, v & SCR.ENUM.PIXEL.DARK)
+    set_raw(x, y, 0, v & SCR.COLOR.BRIGHT)
+    set_raw(x, y, 1, v & SCR.COLOR.DARK)
 .
 
 def set_byte(x: int, y: int, v: int): None
     if not in_bounds(x, y); <-;.
-    set_group(x, y, 0, (v & SCR.ENUM.PIXEL.BRIGHT) * 0xFF)
-    set_group(x, y, 1, ((v & SCR.ENUM.PIXEL.DARK) >> 1) * 0xFF)
+    set_group(x, y, 0, (v & SCR.COLOR.BRIGHT) * 0xFF)
+    set_group(x, y, 1, ((v & SCR.COLOR.DARK) >> 1) * 0xFF)
 .
 
 def apply: None
@@ -193,14 +193,14 @@ def image(img: MonoImage, x: int, y: int, v: int): None
                 byte = brush >> (8 + ox)
                 === draw the byte on the screen if it contains data
                 if byte
-                    paint_group(x + bx * 8, y + py, 0, byte, v & SCR.ENUM.PIXEL.BRIGHT)
-                    paint_group(x + bx * 8, y + py, 1, byte, v & SCR.ENUM.PIXEL.DARK)
+                    paint_group(x + bx * 8, y + py, 0, byte, v & SCR.COLOR.BRIGHT)
+                    paint_group(x + bx * 8, y + py, 1, byte, v & SCR.COLOR.DARK)
                 .
                 === draw the remaining part if it's being cut off by the byte border
                 byte = brush >> ox
                 if byte
-                    paint_group(x + (bx+1) * 8, y + py, 0, byte, v & SCR.ENUM.PIXEL.BRIGHT)
-                    paint_group(x + (bx+1) * 8, y + py, 1, byte, v & SCR.ENUM.PIXEL.DARK)
+                    paint_group(x + (bx+1) * 8, y + py, 0, byte, v & SCR.COLOR.BRIGHT)
+                    paint_group(x + (bx+1) * 8, y + py, 1, byte, v & SCR.COLOR.DARK)
                 .
             .
         .

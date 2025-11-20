@@ -93,12 +93,12 @@ def main
             toprint2 .= replace(k, v[0])
         .
         toprint = toprint1 + toprint2
-        if shift; screen.rect(SCR.WIDTH-10, SCR.HEIGHT-8, 5, 8, SCR.ENUM.PIXEL.BLACK);.
-        if tools; screen.rect(SCR.WIDTH-5, SCR.HEIGHT-8, 5, 8, SCR.ENUM.PIXEL.BLACK);.
-        screen.write("S", SCR.WIDTH-9, SCR.HEIGHT-8, (SCR.ENUM.PIXEL.WHITE if shift else SCR.ENUM.PIXEL.BLACK), font.miniwi)
-        screen.write("T", SCR.WIDTH-4, SCR.HEIGHT-8, (SCR.ENUM.PIXEL.WHITE if tools else SCR.ENUM.PIXEL.BLACK), font.miniwi)
-        screen.write(toprint..("=" if get else ""), 0, 0, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
-        if not get; screen.write("|", 11*#(toprint1.split("\n")[-1]), 14*toprint1.count("\n"), SCR.ENUM.PIXEL.DARK, font.classwiz_cw);.
+        if shift; screen.rect(SCR.WIDTH-10, SCR.HEIGHT-8, 5, 8, SCR.COLOR.BLACK);.
+        if tools; screen.rect(SCR.WIDTH-5, SCR.HEIGHT-8, 5, 8, SCR.COLOR.BLACK);.
+        screen.write("S", SCR.WIDTH-9, SCR.HEIGHT-8, (SCR.COLOR.WHITE if shift else SCR.COLOR.BLACK), font.miniwi)
+        screen.write("T", SCR.WIDTH-4, SCR.HEIGHT-8, (SCR.COLOR.WHITE if tools else SCR.COLOR.BLACK), font.miniwi)
+        screen.write(toprint..("=" if get else ""), 0, 0, SCR.COLOR.BLACK, font.classwiz_cw)
+        if not get; screen.write("|", 11*#(toprint1.split("\n")[-1]), 14*toprint1.count("\n"), SCR.COLOR.DARK, font.classwiz_cw);.
         if get
             try
                 if      buf == "";          ans = "0";
@@ -118,18 +118,18 @@ def main
                         cx = SCR.WIDTH//2
                         cy = SCR.HEIGHT//2
                         screen.clear!
-                        screen.line_v(cx, 0, SCR.HEIGHT, SCR.ENUM.PIXEL.DARK)
-                        screen.line_h(0, cy, SCR.WIDTH, SCR.ENUM.PIXEL.DARK)
+                        screen.line_v(cx, 0, SCR.HEIGHT, SCR.COLOR.DARK)
+                        screen.line_h(0, cy, SCR.WIDTH, SCR.COLOR.DARK)
                         for x to SCR.WIDTH
                             var.x = x-cx
                             var.y = eval(expr)
                             y = math.floor(var.y)
                             if y > 0
-                                screen.line_v(x, cy-y, y, SCR.ENUM.PIXEL.BRIGHT)
+                                screen.line_v(x, cy-y, y, SCR.COLOR.BRIGHT)
                             .else
-                                screen.line_v(x, cy+1, -y-1, SCR.ENUM.PIXEL.BRIGHT)
+                                screen.line_v(x, cy+1, -y-1, SCR.COLOR.BRIGHT)
                             .
-                            screen.set(x, math.floor(cy-var.y), SCR.ENUM.PIXEL.BLACK)
+                            screen.set(x, math.floor(cy-var.y), SCR.COLOR.BLACK)
                         .
                     .else
                         ans = eval(expr)
@@ -154,7 +154,7 @@ def main
                 result = "invalid name"
             .
             <|"[EVAL] Result: \""..result.."\""
-            screen.write(result, 0, SCR.HEIGHT-14, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
+            screen.write(result, 0, SCR.HEIGHT-14, SCR.COLOR.BLACK, font.classwiz_cw)
             get = False
         .
         screen.apply!

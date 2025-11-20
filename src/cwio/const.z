@@ -22,16 +22,16 @@ class SCR
             ON      = 0b001
             RESET   = 0b010
         .
-        class PIXEL
-            WHITE   = 0b00
-            BRIGHT  = 0b01
-            DARK    = 0b10
-            BLACK   = 0b11
-        .
         class BUFFER
             SHIFT   = 0xF801
             SCREEN  = 0xF820
         .
+    .
+    class COLOR
+        WHITE   = 0b00
+        BRIGHT  = 0b01
+        DARK    = 0b10
+        BLACK   = 0b11
     .
     RANGE       = 0xF030
     MODE        = 0xF031

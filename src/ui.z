@@ -8,12 +8,12 @@ use res
 def notify(title: str, msg: str, icon: MonoImage | None = None, wait: bool = True)
     screen.clear!
     if icon
-        screen.image(icon, 0, 0, SCR.ENUM.PIXEL.BLACK)
-        screen.write(title, 26, 6, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
+        screen.image(icon, 0, 0, SCR.COLOR.BLACK)
+        screen.write(title, 26, 6, SCR.COLOR.BLACK, font.classwiz_cw)
     .else
-        screen.write(title, 0, 6, SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)
+        screen.write(title, 0, 6, SCR.COLOR.BLACK, font.classwiz_cw)
     .
-    screen.write(msg, 0, 24, SCR.ENUM.PIXEL.BLACK, font.miniwi)
+    screen.write(msg, 0, 24, SCR.COLOR.BLACK, font.miniwi)
     screen.apply!
     if wait; keyboard.wait!;.
 .
@@ -38,17 +38,17 @@ def choose(items: list(str), msg: str | None = None): int
         if refresh
             refresh = False
             screen.clear!
-            if msg; screen.write(msg, 0, 0, SCR.ENUM.PIXEL.BLACK, font.miniwi);.
+            if msg; screen.write(msg, 0, 0, SCR.COLOR.BLACK, font.miniwi);.
             for item at i -> curr
                 ix = x+2
                 iy = (y+(h+2)*i)+12
-                screen.image(res.ui.circled(i+1), ix, iy, SCR.ENUM.PIXEL.BLACK)
-                screen.write(item, ix+12, iy+1, SCR.ENUM.PIXEL.BLACK, f)
+                screen.image(res.ui.circled(i+1), ix, iy, SCR.COLOR.BLACK)
+                screen.write(item, ix+12, iy+1, SCR.COLOR.BLACK, f)
             .
         .
         for item at i -> curr
             if i == sel % 4 or i == oldsel % 4
-                screen.box(x+12, y+(h+2)*i+12, SCR.WIDTH-12, h+2, (SCR.ENUM.PIXEL.BLACK if i == sel % 4 else SCR.ENUM.PIXEL.WHITE))
+                screen.box(x+12, y+(h+2)*i+12, SCR.WIDTH-12, h+2, (SCR.COLOR.BLACK if i == sel % 4 else SCR.COLOR.WHITE))
             .
         .
         screen.apply!
@@ -113,8 +113,8 @@ def ask(msg: str | None = None)
     shift = False
     while True
         screen.clear!
-        if msg; screen.write(msg, 0, 0, SCR.ENUM.PIXEL.BLACK, font.miniwi);.
-        screen.write(buf + "|", 0, (8 if msg else 0), SCR.ENUM.PIXEL.BLACK, font.miniwi)
+        if msg; screen.write(msg, 0, 0, SCR.COLOR.BLACK, font.miniwi);.
+        screen.write(buf + "|", 0, (8 if msg else 0), SCR.COLOR.BLACK, font.miniwi)
         screen.apply!
         while keyboard.pressed_any!;;.
         key = keyboard.get_next!

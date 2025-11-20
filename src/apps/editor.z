@@ -30,10 +30,10 @@ def printlines(s: str, pos: int, oldpos: int, writeall: bool = True)
     if lines != oldlines; refresh = True;.
 
     if refresh; screen.clear!
-    .else; screen.rect(0, 0, SCR.WIDTH, 8, SCR.ENUM.PIXEL.WHITE)
+    .else; screen.rect(0, 0, SCR.WIDTH, 8, SCR.COLOR.WHITE)
     .
-    screen.write((out if refresh else curr), 0, 0, SCR.ENUM.PIXEL.BLACK, font.miniwi)
-    screen.write("|", (lastlen%48)*4, 0, SCR.ENUM.PIXEL.DARK, font.miniwi)
+    screen.write((out if refresh else curr), 0, 0, SCR.COLOR.BLACK, font.miniwi)
+    screen.write("|", (lastlen%48)*4, 0, SCR.COLOR.DARK, font.miniwi)
     <-[#total, lastlen]
 .
 

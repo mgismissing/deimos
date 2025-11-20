@@ -27,13 +27,13 @@ keyboard.init!
 scr = ui.Screen!
 
 scr \
-    + (title    := ui.Label(0, 0, "Welcome to Deimos", SCR.ENUM.PIXEL.BLACK, font.classwiz_cw)) \
+    + (title    := ui.Label(0, 0, "Welcome to Deimos", SCR.COLOR.BLACK, font.classwiz_cw)) \
     + (desc     := ui.Label(0, 20, \
         "Press HOME for a list of apps.\n"+\
         "\n"+\
         "Go to https://github.com/mgismissing/deimos for\n"+\
         "more info about this project.", \
-    SCR.ENUM.PIXEL.BLACK, font.miniwi))
+    SCR.COLOR.BLACK, font.miniwi))
 
 applist = [,]
 for app -> apps

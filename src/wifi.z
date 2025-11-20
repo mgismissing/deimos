@@ -38,7 +38,7 @@ if support
 
         <|"[WIFI] Connecting to \""..ssid.."\""
         screen.clear!
-        screen.write("Connecting to \""..ssid.."\"...\n\nNOTE: This operation will automatically time out\nafter 15 seconds if the AP doesn't reply in that\ntime frame.", 0, 0, SCR.ENUM.PIXEL.BLACK, font.miniwi)
+        screen.write("Connecting to \""..ssid.."\"...\n\nNOTE: This operation will automatically time out\nafter 15 seconds if the AP doesn't reply in that\ntime frame.", 0, 0, SCR.COLOR.BLACK, font.miniwi)
         screen.apply!
         
         start = time.ticks_ms!
@@ -69,7 +69,7 @@ if support
         .
         <|"[WIFI] Connected: "..w.ifconfig! as str
         screen.clear!
-        screen.write("Successfully connected!\nIP: "..w.ifconfig![0] as str.."\n\nPress [ANY] to continue...", 0, 0, SCR.ENUM.PIXEL.BLACK, font.miniwi)
+        screen.write("Successfully connected!\nIP: "..w.ifconfig![0] as str.."\n\nPress [ANY] to continue...", 0, 0, SCR.COLOR.BLACK, font.miniwi)
         screen.apply!
         keyboard.wait!
         <-True
