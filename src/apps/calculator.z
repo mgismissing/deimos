@@ -162,103 +162,103 @@ def main
         key = keyboard.get_next!
         chr = None
         mov = 0
-        if          key == KB.KEYS.SHIFT
+        if          key == KB.KEY.SHIFT
             shift = not $
-        .elif       key == KB.KEYS.TOOLS
+        .elif       key == KB.KEY.TOOLS
             tools = not $
         .elif shift and not tools
             shift = False
             tools = False
-            if      key == KB.KEYS.LEFT
+            if      key == KB.KEY.LEFT
                 pos = 0
-            .elif   key == KB.KEYS.RIGHT
+            .elif   key == KB.KEY.RIGHT
                 pos = #buf
-            .elif   key == KB.KEYS.LPAREN     ; chr = "="
-            .elif   key == KB.KEYS.RPAREN     ; chr = ","
-            .elif   key == KB.KEYS.MULTIPLY   ; chr = "%"
-            .elif   key == KB.KEYS.SIN        ; chr = "\uF001()"; mov--
-            .elif   key == KB.KEYS.COS        ; chr = "\uF003()"; mov--
-            .elif   key == KB.KEYS.TAN        ; chr = "\uF005()"; mov--
-            .elif   key == KB.KEYS.ADD        ; chr = "\"\""; mov--
-            .elif   key == KB.KEYS.ANS        ; chr = "\uF008()"; mov-=1
-            .elif   key == KB.KEYS.N0         ; chr = "\uF010"
-            .elif   key == KB.KEYS.DOT        ; chr = "\uF011"
-            .elif   key == KB.KEYS.POWER_10   ; chr = "\uF012"
+            .elif   key == KB.KEY.LPAREN     ; chr = "="
+            .elif   key == KB.KEY.RPAREN     ; chr = ","
+            .elif   key == KB.KEY.MULTIPLY   ; chr = "%"
+            .elif   key == KB.KEY.SIN        ; chr = "\uF001()"; mov--
+            .elif   key == KB.KEY.COS        ; chr = "\uF003()"; mov--
+            .elif   key == KB.KEY.TAN        ; chr = "\uF005()"; mov--
+            .elif   key == KB.KEY.ADD        ; chr = "\"\""; mov--
+            .elif   key == KB.KEY.ANS        ; chr = "\uF008()"; mov-=1
+            .elif   key == KB.KEY.N0         ; chr = "\uF010"
+            .elif   key == KB.KEY.DOT        ; chr = "\uF011"
+            .elif   key == KB.KEY.POWER_10   ; chr = "\uF012"
             .
         .elif tools and not shift
             tools = False
             shift = False
-            if      key == KB.KEYS.LPAREN     ; chr = "[]"; mov--
-            .elif   key == KB.KEYS.RPAREN     ; chr = "]"
-            .elif   key == KB.KEYS.MULTIPLY   ; chr = "!"
-            .elif   key == KB.KEYS.DOT        ; chr = ":"
-            .elif   key == KB.KEYS.ANS        ; chr = "\uF009([])"; mov-=2
-            .elif   key == KB.KEYS.FORMAT     ; chr = "\\"
-            .elif   key == KB.KEYS.EXE        ; chr = "\n"
+            if      key == KB.KEY.LPAREN     ; chr = "[]"; mov--
+            .elif   key == KB.KEY.RPAREN     ; chr = "]"
+            .elif   key == KB.KEY.MULTIPLY   ; chr = "!"
+            .elif   key == KB.KEY.DOT        ; chr = ":"
+            .elif   key == KB.KEY.ANS        ; chr = "\uF009([])"; mov-=2
+            .elif   key == KB.KEY.FORMAT     ; chr = "\\"
+            .elif   key == KB.KEY.EXE        ; chr = "\n"
             .
         .elif shift and tools
             shift = False
             tools = False
-            if      key == KB.KEYS.RPAREN     ; chr = ";"
+            if      key == KB.KEY.RPAREN     ; chr = ";"
             .
         .else
-            if      key == KB.KEYS.BKSPACE
+            if      key == KB.KEY.BKSPACE
                 if pos > 0
                     buf = $[:pos-1] + $[pos:]
                     pos -= 1
                 .else
                     buf = $[1:]
                 .
-            .elif   key == KB.KEYS.AC
+            .elif   key == KB.KEY.AC
                 buf = ""
                 pos = 0
-            .elif   key == KB.KEYS.LEFT
+            .elif   key == KB.KEY.LEFT
                 if pos > 0
                     pos -= 1
                 .else
                     pos = #buf
                 .
-            .elif   key == KB.KEYS.RIGHT
+            .elif   key == KB.KEY.RIGHT
                 if pos < #buf
                     pos += 1
                 .else
                     pos = 0
                 .
-            .elif   key == KB.KEYS.FORMAT
+            .elif   key == KB.KEY.FORMAT
                 chr = ui.ask("Insert text")
-            .elif   key == KB.KEYS.CATALOG
+            .elif   key == KB.KEY.CATALOG
                 c = ui.choose(["Plot y"])
                 if c == 0
                     get = "plot/y"
                 .
-            .elif   key == KB.KEYS.HOME       ; break
-            .elif   key == KB.KEYS.EXE        ; get = True
-            .elif   key == KB.KEYS.N0         ; chr = "0"
-            .elif   key == KB.KEYS.N1         ; chr = "1"
-            .elif   key == KB.KEYS.N2         ; chr = "2"
-            .elif   key == KB.KEYS.N3         ; chr = "3"
-            .elif   key == KB.KEYS.N4         ; chr = "4"
-            .elif   key == KB.KEYS.N5         ; chr = "5"
-            .elif   key == KB.KEYS.N6         ; chr = "6"
-            .elif   key == KB.KEYS.N7         ; chr = "7"
-            .elif   key == KB.KEYS.N8         ; chr = "8"
-            .elif   key == KB.KEYS.N9         ; chr = "9"
-            .elif   key == KB.KEYS.DOT        ; chr = "."
-            .elif   key == KB.KEYS.ADD        ; chr = "+"
-            .elif   key == KB.KEYS.SUBTRACT   ; chr = "-"
-            .elif   key == KB.KEYS.MULTIPLY   ; chr = "*"
-            .elif   key == KB.KEYS.DIVIDE     ; chr = "/"
-            .elif   key == KB.KEYS.POWER      ; chr = "^"
-            .elif   key == KB.KEYS.POWER_2    ; chr = "^2"
-            .elif   key == KB.KEYS.POWER_10   ; chr = "*10^()"; mov--
-            .elif   key == KB.KEYS.SIN        ; chr = "\uF000()"; mov--
-            .elif   key == KB.KEYS.COS        ; chr = "\uF002()"; mov--
-            .elif   key == KB.KEYS.TAN        ; chr = "\uF004()"; mov--
-            .elif   key == KB.KEYS.SQRT       ; chr = "\uF006()"; mov--
-            .elif   key == KB.KEYS.LPAREN     ; chr = "()"; mov--
-            .elif   key == KB.KEYS.RPAREN     ; chr = ")"
-            .elif   key == KB.KEYS.ANS        ; chr = "\uF007"
-            .elif   key == KB.KEYS.X          ; chr = "\uF010"
+            .elif   key == KB.KEY.HOME       ; break
+            .elif   key == KB.KEY.EXE        ; get = True
+            .elif   key == KB.KEY.N0         ; chr = "0"
+            .elif   key == KB.KEY.N1         ; chr = "1"
+            .elif   key == KB.KEY.N2         ; chr = "2"
+            .elif   key == KB.KEY.N3         ; chr = "3"
+            .elif   key == KB.KEY.N4         ; chr = "4"
+            .elif   key == KB.KEY.N5         ; chr = "5"
+            .elif   key == KB.KEY.N6         ; chr = "6"
+            .elif   key == KB.KEY.N7         ; chr = "7"
+            .elif   key == KB.KEY.N8         ; chr = "8"
+            .elif   key == KB.KEY.N9         ; chr = "9"
+            .elif   key == KB.KEY.DOT        ; chr = "."
+            .elif   key == KB.KEY.ADD        ; chr = "+"
+            .elif   key == KB.KEY.SUBTRACT   ; chr = "-"
+            .elif   key == KB.KEY.MULTIPLY   ; chr = "*"
+            .elif   key == KB.KEY.DIVIDE     ; chr = "/"
+            .elif   key == KB.KEY.POWER      ; chr = "^"
+            .elif   key == KB.KEY.POWER_2    ; chr = "^2"
+            .elif   key == KB.KEY.POWER_10   ; chr = "*10^()"; mov--
+            .elif   key == KB.KEY.SIN        ; chr = "\uF000()"; mov--
+            .elif   key == KB.KEY.COS        ; chr = "\uF002()"; mov--
+            .elif   key == KB.KEY.TAN        ; chr = "\uF004()"; mov--
+            .elif   key == KB.KEY.SQRT       ; chr = "\uF006()"; mov--
+            .elif   key == KB.KEY.LPAREN     ; chr = "()"; mov--
+            .elif   key == KB.KEY.RPAREN     ; chr = ")"
+            .elif   key == KB.KEY.ANS        ; chr = "\uF007"
+            .elif   key == KB.KEY.X          ; chr = "\uF010"
             .
         .
         if chr

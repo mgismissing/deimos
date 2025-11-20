@@ -60,7 +60,7 @@ class SCR
 .
 
 class KB
-    class KEYS
+    class KEY
         N1      = 0b000_000
         N4      = 0b000_001
         N7      = 0b000_010

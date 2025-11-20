@@ -62,7 +62,7 @@ try
         scr.render!
         screen.apply!
         key = keyboard.get_next!
-        if key == KB.KEYS.SETTINGS
+        if key == KB.KEY.SETTINGS
             c = choose(["Update from OFW repo", "WiFi", "Power", "Debug",])
             if c == 0
                 if wifi.support
@@ -116,7 +116,7 @@ try
                 )
                 raise DebugInterrupt("Returning to REPL")
             .
-        .elif key == KB.KEYS.HOME
+        .elif key == KB.KEY.HOME
             c = choose(applist)
             if c >= 0
                 run_app(apps[c][0])

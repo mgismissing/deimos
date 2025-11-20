@@ -52,28 +52,28 @@ def choose(items: list(str), msg: str | None = None): int
             .
         .
         screen.apply!
-        while keyboard.pressed(KB.KEYS.OK);;.
+        while keyboard.pressed(KB.KEY.OK);;.
         key = keyboard.get_next!
         oldsel = sel
-        if key == KB.KEYS.UP
+        if key == KB.KEY.UP
             sel = ($-1) % #items
-        .elif key == KB.KEYS.DOWN
+        .elif key == KB.KEY.DOWN
             sel = ($+1) % #items
-        .elif key == KB.KEYS.PG_UP
+        .elif key == KB.KEY.PG_UP
             sel = ($-4) % #items
-        .elif key == KB.KEYS.PG_DOWN
+        .elif key == KB.KEY.PG_DOWN
             sel = ($+4) % #items
-        .elif key == KB.KEYS.OK
+        .elif key == KB.KEY.OK
             <-sel
-        .elif key == KB.KEYS.BACK
+        .elif key == KB.KEY.BACK
             <- -1
-        .elif key == KB.KEYS.N1
+        .elif key == KB.KEY.N1
             <-page*4
-        .elif key == KB.KEYS.N2
+        .elif key == KB.KEY.N2
             <-page*4+1
-        .elif key == KB.KEYS.N3
+        .elif key == KB.KEY.N3
             <-page*4+2
-        .elif key == KB.KEYS.N4
+        .elif key == KB.KEY.N4
             <-page*4+3
         .
     .
@@ -118,8 +118,8 @@ def ask(msg: str | None = None)
         screen.apply!
         while keyboard.pressed_any!;;.
         key = keyboard.get_next!
-        if          key == KB.KEYS.SHIFT; shift = not $;
-        .elif       key == KB.KEYS.FORMAT and #buf
+        if          key == KB.KEY.SHIFT; shift = not $;
+        .elif       key == KB.KEY.FORMAT and #buf
             last = buf[-1]
             if last.isdigit!
                 count = 0
@@ -142,18 +142,18 @@ def ask(msg: str | None = None)
         .elif shift
             shift = False
         .else
-            if      key == KB.KEYS.EXE    ; <-buf;
-            .elif   key == KB.KEYS.BKSPACE; buf = $[:-1];
-            .elif   key == KB.KEYS.N0     ; buf += "0";
-            .elif   key == KB.KEYS.N1     ; buf += "1";
-            .elif   key == KB.KEYS.N2     ; buf += "2";
-            .elif   key == KB.KEYS.N3     ; buf += "3";
-            .elif   key == KB.KEYS.N4     ; buf += "4";
-            .elif   key == KB.KEYS.N5     ; buf += "5";
-            .elif   key == KB.KEYS.N6     ; buf += "6";
-            .elif   key == KB.KEYS.N7     ; buf += "7";
-            .elif   key == KB.KEYS.N8     ; buf += "8";
-            .elif   key == KB.KEYS.N9     ; buf += "9";
+            if      key == KB.KEY.EXE    ; <-buf;
+            .elif   key == KB.KEY.BKSPACE; buf = $[:-1];
+            .elif   key == KB.KEY.N0     ; buf += "0";
+            .elif   key == KB.KEY.N1     ; buf += "1";
+            .elif   key == KB.KEY.N2     ; buf += "2";
+            .elif   key == KB.KEY.N3     ; buf += "3";
+            .elif   key == KB.KEY.N4     ; buf += "4";
+            .elif   key == KB.KEY.N5     ; buf += "5";
+            .elif   key == KB.KEY.N6     ; buf += "6";
+            .elif   key == KB.KEY.N7     ; buf += "7";
+            .elif   key == KB.KEY.N8     ; buf += "8";
+            .elif   key == KB.KEY.N9     ; buf += "9";
             .
         .
     .

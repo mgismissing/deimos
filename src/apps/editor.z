@@ -58,7 +58,7 @@ def main
         key = keyboard.get_next!
         char = None
         oldpos = pos
-        if    key == KB.KEYS.HOME
+        if    key == KB.KEY.HOME
             sel = ui.choose(["Save", "Save and exit", "Save as...", "Save as... and exit", "Exit without saving"])
             exit = False
             if sel in [1, 3, 4,]; exit = True;.
@@ -81,42 +81,42 @@ def main
             .
             if exit; break;.
             refresh = True
-        .elif     key == KB.KEYS.SHIFT      ; shift = True
-        .elif     key == KB.KEYS.TOOLS      ; tools = True
+        .elif     key == KB.KEY.SHIFT      ; shift = True
+        .elif     key == KB.KEY.TOOLS      ; tools = True
         .elif shift and not tools
             shift = False
             tools = False
-            if    key == KB.KEYS.LPAREN     ; char = "="
-            .elif key == KB.KEYS.RPAREN     ; char = ","
-            .elif key == KB.KEYS.ADD        ; char = "\""
-            .elif key == KB.KEYS.MULTIPLY   ; char = "^"
-            .elif key == KB.KEYS.DIVIDE     ; char = "%"
-            .elif key == KB.KEYS.DOT        ; char = "!"
+            if    key == KB.KEY.LPAREN     ; char = "="
+            .elif key == KB.KEY.RPAREN     ; char = ","
+            .elif key == KB.KEY.ADD        ; char = "\""
+            .elif key == KB.KEY.MULTIPLY   ; char = "^"
+            .elif key == KB.KEY.DIVIDE     ; char = "%"
+            .elif key == KB.KEY.DOT        ; char = "!"
             .
         .elif tools and not shift
             shift = False
             tools = False
-            if    key == KB.KEYS.RPAREN     ; char = ";"
-            .elif key == KB.KEYS.DOT        ; char = "?"
+            if    key == KB.KEY.RPAREN     ; char = ";"
+            .elif key == KB.KEY.DOT        ; char = "?"
             .
         .elif shift and tools
             shift = False
             tools = False
         .else
-            if    key == KB.KEYS.BKSPACE    ; char = -1
-            .elif key == KB.KEYS.LEFT       ; pos -= (1 if pos > 0 else 0)
-            .elif key == KB.KEYS.RIGHT      ; pos += (1 if pos < #buf else 0)
-            .elif key == KB.KEYS.UP         ; pos -= (lastlen+1 if pos-(lastlen+1) >= 0 else lastlen)
-            .elif key == KB.KEYS.DOWN       ; pos += (tonext if pos+tonext <= #buf else 0)
-            .elif key == KB.KEYS.LPAREN     ; char = "("
-            .elif key == KB.KEYS.RPAREN     ; char = ")"
-            .elif key == KB.KEYS.ADD        ; char = "+"
-            .elif key == KB.KEYS.SUBTRACT   ; char = "-"
-            .elif key == KB.KEYS.MULTIPLY   ; char = "*"
-            .elif key == KB.KEYS.DIVIDE     ; char = "/"
-            .elif key == KB.KEYS.DOT        ; char = "."
-            .elif key == KB.KEYS.POWER_10   ; char = " "
-            .elif key == KB.KEYS.FORMAT     ; char = ui.ask("Insert text")
+            if    key == KB.KEY.BKSPACE    ; char = -1
+            .elif key == KB.KEY.LEFT       ; pos -= (1 if pos > 0 else 0)
+            .elif key == KB.KEY.RIGHT      ; pos += (1 if pos < #buf else 0)
+            .elif key == KB.KEY.UP         ; pos -= (lastlen+1 if pos-(lastlen+1) >= 0 else lastlen)
+            .elif key == KB.KEY.DOWN       ; pos += (tonext if pos+tonext <= #buf else 0)
+            .elif key == KB.KEY.LPAREN     ; char = "("
+            .elif key == KB.KEY.RPAREN     ; char = ")"
+            .elif key == KB.KEY.ADD        ; char = "+"
+            .elif key == KB.KEY.SUBTRACT   ; char = "-"
+            .elif key == KB.KEY.MULTIPLY   ; char = "*"
+            .elif key == KB.KEY.DIVIDE     ; char = "/"
+            .elif key == KB.KEY.DOT        ; char = "."
+            .elif key == KB.KEY.POWER_10   ; char = " "
+            .elif key == KB.KEY.FORMAT     ; char = ui.ask("Insert text")
             .
         .
         if char
