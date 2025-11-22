@@ -10,7 +10,7 @@ use gc
 
 class INFO
     NAME = "official"
-    VER = "1.4.0"
+    VER = "1.5.0"
     TARGET = "cwii"
 .
 
