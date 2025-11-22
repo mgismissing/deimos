@@ -17,8 +17,8 @@ def get_mode: tuple(int, int)
 .
 
 def set_mode(mode: int | None, submode: int | None): None
-    if mode; calc.write(ADDR.MODE, mode);.
-    if submode; calc.write(ADDR.SUBMODE, submode);.
+    if mode != None; calc.write(ADDR.MODE, mode);.
+    if submode != None; calc.write(ADDR.SUBMODE, submode);.
 .
 
 def get_history: bytes
