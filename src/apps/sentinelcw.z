@@ -1,0 +1,49 @@
+use * from cwio
+use * from cwio.const
+use ui
+
+lib = True
+name = "Sentinel"
+requires = ["cwii",]
+
+class ADDR
+    MODE    = 0x91A1
+    SUBMODE = 0x91A2
+    HISTORY = 0x93F8
+.
+
+def main
+    while True
+        c = ui.choose(["Set mode byte", "Set submode byte", "Inject history",])
+        if c == 0
+            v = (calc.read(ADDR.MODE) as hex as str)[2:].upper!
+            v = eval(ui.ask("New value:", "0x"+("0"*(2-#v))+$))
+            if isinstance(v, int)
+                calc.write(ADDR.MODE, v & 0xFF)
+            .
+        .elif c == 1
+            v = (calc.read(ADDR.SUBMODE) as hex as str)[2:].upper!
+            v = eval(ui.ask("New value:", "0x"+("0"*(2-#v))+$))
+            if isinstance(v, int)
+                calc.write(ADDR.SUBMODE, v & 0xFF)
+            .
+        .elif c == 2
+            file = ui.choose_file!
+            if file != -1
+                with open(file, "rb") = f
+                    data = f.read!
+                    if #data == 400
+                        for i -> {->400}
+                            calc.write(ADDR.HISTORY+i, data[i])
+                        .
+                    .else
+                        ui.notify(
+                            "Malformed file",
+                            "The file you chose is not a valid history dump.\nHistory dumps are generally 400B bin files."
+                        )
+                    .
+                .
+            .
+        .elif c == -1; break;.
+    .
+.
