@@ -5,6 +5,7 @@ use fs
 use ui
 use res
 use support as wifi_support from wifi
+use INFO from update
 
 class Error from Exception;;.
 
@@ -44,13 +45,30 @@ def require(name: str)
 
 def run(name: str)
     app = require(name)
-    if (not wifi_support) and ("wifi" in getattr(app, "requires", [,]))
+    requires = getattr(app, "requires", [,])
+    if (not wifi_support) and ("wifi" in requires)
         ui.notify(
             "Unsupported app",
             "This app requires WiFi, which isn't supported\nby this device.",
             res.ui.error
         )
         raise UnsupportedError("wifi")
+    .
+    if "cwii" in requires and INFO.TARGET != "cwii"
+        ui.notify(
+            "Unsupported app",
+            "This app targets CWII devices, while you\ncurrently have a "+INFO.TARGET.upper!+" one.",
+            res.ui.error
+        )
+        raise UnsupportedError("cwii")
+    .
+    if "cwi" in requires and INFO.TARGET != "cwi"
+        ui.notify(
+            "Unsupported app",
+            "This app targets CWI devices, while you\ncurrently have a "+INFO.TARGET.upper!+" one.",
+            res.ui.error
+        )
+        raise UnsupportedError("cwi")
     .
     appmain = getattr(app, "main", None)
     if appmain
