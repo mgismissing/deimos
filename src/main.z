@@ -6,6 +6,7 @@ use machine
 use Pin from machine
 use sys
 use os
+use power
 use ui
 use choose from ui
 use res
@@ -101,10 +102,12 @@ try
                     )
                 .
             .elif c == 2
-                c = choose(["Reset environment", "Reboot",])
+                c = choose(["Deep sleep", "Soft reset", "Hard reset",])
                 if c == 0
-                    machine.soft_reset!
+                    power.deepsleep!
                 .elif c == 1
+                    machine.soft_reset!
+                .elif c == 2
                     machine.reset!
                 .
             .elif c == 3
@@ -121,6 +124,8 @@ try
             if c >= 0
                 run_app(apps[c][0])
             .
+        .elif key == KB.KEY.AC
+            power.deepsleep!
         .
     .
 .catch DebugInterrupt = e
