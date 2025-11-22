@@ -34,19 +34,20 @@ def set_history(history: bytes): bool
     for i -> {->400}
         calc.write(ADDR.HISTORY+i, history[i])
     .
+    <-True
 .
 
 def main
     while True
         c = ui.choose(["Set mode byte", "Set submode byte", "Inject history",])
         if c == 0
-            v = (get_history![0] as hex as str)[2:].upper!
+            v = (get_mode![0] as hex as str)[2:].upper!
             v = eval(ui.ask("New value:", "0x"+("0"*(2-#v))+$))
             if isinstance(v, int)
                 set_mode(v, None)
             .
         .elif c == 1
-            v = (get_history![1] as hex as str)[2:].upper!
+            v = (get_mode![1] as hex as str)[2:].upper!
             v = eval(ui.ask("New value:", "0x"+("0"*(2-#v))+$))
             if isinstance(v, int)
                 set_mode(None, v)
