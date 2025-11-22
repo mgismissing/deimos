@@ -108,8 +108,8 @@ keypad = [
     "0" = [" ",]
 ]
 
-def ask(msg: str | None = None)
-    buf = ""
+def ask(msg: str | None = None, default: str = "")
+    buf = default
     shift = False
     while True
         screen.clear!
