@@ -141,19 +141,23 @@ def ask(msg: str | None = None, default: str = "")
             .
         .elif shift
             shift = False
+            if      key == KB.KEY.SUBTRACT  ; buf += "_"
+            .
         .else
-            if      key == KB.KEY.EXE    ; <-buf;
-            .elif   key == KB.KEY.BKSPACE; buf = $[:-1];
-            .elif   key == KB.KEY.N0     ; buf += "0";
-            .elif   key == KB.KEY.N1     ; buf += "1";
-            .elif   key == KB.KEY.N2     ; buf += "2";
-            .elif   key == KB.KEY.N3     ; buf += "3";
-            .elif   key == KB.KEY.N4     ; buf += "4";
-            .elif   key == KB.KEY.N5     ; buf += "5";
-            .elif   key == KB.KEY.N6     ; buf += "6";
-            .elif   key == KB.KEY.N7     ; buf += "7";
-            .elif   key == KB.KEY.N8     ; buf += "8";
-            .elif   key == KB.KEY.N9     ; buf += "9";
+            if      key == KB.KEY.EXE       ; <-buf
+            .elif   key == KB.KEY.AC        ; buf = ""
+            .elif   key == KB.KEY.BKSPACE   ; buf = $[:-1]
+            .elif   key == KB.KEY.N0        ; buf += "0"
+            .elif   key == KB.KEY.N1        ; buf += "1"
+            .elif   key == KB.KEY.N2        ; buf += "2"
+            .elif   key == KB.KEY.N3        ; buf += "3"
+            .elif   key == KB.KEY.N4        ; buf += "4"
+            .elif   key == KB.KEY.N5        ; buf += "5"
+            .elif   key == KB.KEY.N6        ; buf += "6"
+            .elif   key == KB.KEY.N7        ; buf += "7"
+            .elif   key == KB.KEY.N8        ; buf += "8"
+            .elif   key == KB.KEY.N9        ; buf += "9"
+            .elif   key == KB.KEY.DIVIDE    ; buf += "/"
             .
         .
     .
