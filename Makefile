@@ -18,8 +18,16 @@ all: build
 micropython:
 	git clone https://github.com/micropython/micropython
 
-install:
+zlang:
 	python -m pip install zlang
+
+pyelftools:
+	python -m pip install pyelftools
+
+mpremote:
+	python -m pip install mpremote
+
+install: zlang pyelftools mpremote
 
 init: micropython install
 
