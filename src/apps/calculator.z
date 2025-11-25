@@ -120,16 +120,23 @@ def main
                         screen.clear!
                         screen.line_v(cx, 0, SCR.HEIGHT, SCR.COLOR.DARK)
                         screen.line_h(0, cy, SCR.WIDTH, SCR.COLOR.DARK)
+                        screen.apply!
+                        parts = expr.count(";")+1
                         for x to SCR.WIDTH
-                            var.x = x-cx
-                            var.y = eval(expr)
-                            y = math.floor(var.y)
-                            if y > 0
-                                screen.line_v(x, cy-y, y, SCR.COLOR.BRIGHT)
-                            .else
-                                screen.line_v(x, cy+1, -y-1, SCR.COLOR.BRIGHT)
+                            for part -> expr.split(";")
+                                var.x = x-cx
+                                var.y = eval(part)
+                                y = math.floor(var.y)
+                                if parts == 1
+                                    if y > 0
+                                        screen.line_v(x, cy-y, y, SCR.COLOR.BRIGHT)
+                                    .else
+                                        screen.line_v(x, cy+1, -y-1, SCR.COLOR.BRIGHT)
+                                    .
+                                .
+                                screen.set(x, math.floor(cy-var.y), SCR.COLOR.BLACK)
                             .
-                            screen.set(x, math.floor(cy-var.y), SCR.COLOR.BLACK)
+                            screen.apply!
                         .
                     .else
                         ans = eval(expr)
@@ -152,6 +159,13 @@ def main
                 result = "invalid syntax"
             .catch NameError
                 result = "invalid name"
+            .catch ValueError = e
+                err = e as str
+                result = "value error"
+                if      err.startswith("math domain");;
+                .else
+                    raise e
+                .
             .
             <|"[EVAL] Result: \""..result.."\""
             screen.write(result, 0, SCR.HEIGHT-14, SCR.COLOR.BLACK, font.classwiz_cw)
