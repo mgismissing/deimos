@@ -1,1 +1,1 @@
-magick $1 -resize 192x63! -dither FloydSteinberg -monochrome -depth 1 -negate gray:$2
+magick $1 -resize 192x63! -dither FloydSteinberg -remap pattern:gray50 -monochrome -depth 1 -negate gray:$2
