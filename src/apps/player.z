@@ -1,0 +1,27 @@
+use * from cwio
+use * from cwio.const
+use MonoImage from cwio.screen
+use ui
+use os
+use time
+
+name = "Video Player"
+
+CHUNK_SIZE = (192//8)*63
+
+def main
+    raw = ui.choose_file!
+    with open(raw, "rb") = f
+        while True
+            old = time.ticks_ms!
+            screen.clear!
+            chunk = f.read(CHUNK_SIZE)
+            if not (chunk and #chunk >= CHUNK_SIZE); break;.
+            screen.image(MonoImage(192, 63, chunk), 0, 0, SCR.COLOR.BLACK)
+            screen.apply!
+            wait = 1000+time.ticks_diff(old, time.ticks_ms!)
+            if wait > 0; time.sleep_ms(wait);.
+        .
+    .
+    keyboard.wait!
+.

@@ -45,7 +45,7 @@ setup: clean
 build: setup $(BIN)
 	make -C "$(SRC)/cwio"
 	@rm -rf "$(SRC)/cwio/build"
-	@find "$(SRC)" -type f ! -name "*.z" ! -name "*.c" ! -name "Makefile" -exec sh -c '\
+	@find "$(SRC)" -type f ! -name "*.z" ! -name "*.c" ! -name "*.png" ! -name "*.mp4" ! -name "Makefile" -exec sh -c '\
 		src="$$1"; \
 		rel="$${src#$(SRC)/}"; \
 		cp "$$src" "$(BIN)/$$rel"; \
