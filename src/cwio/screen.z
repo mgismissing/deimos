@@ -28,18 +28,34 @@ empty = [
 ]
 oldbuf = None
 buf = [empty[0][0:], empty[1][0:],]
+region = [SCR.WIDTH_B, SCR.HEIGHT, 0, 0,]
+
+def in_rect(x: int, y: int, w: int, h: int): bool
+    <-raw.in_bounds(x, y, w, h)
+.
 
 def in_bounds(x: int, y: int): bool
     <-raw.in_bounds(x, y, SCR.WIDTH, SCR.HEIGHT)
 .
 
+def update_region(x: int, y: int): None
+    region[0] = min($, x // 8)
+    region[1] = min($, y)
+    region[2] = max($, -(-x // 8))
+    region[3] = max($, y)
+.
+
 def clear: None
+    global region
+    region = [0, 0, SCR.WIDTH_B, SCR.HEIGHT,]
     for plane -> buf
         raw.clear(plane, 0, SCR.SIZE)
     .
 .
 
 def clear_screen: None
+    global region
+    region = [0, 0, SCR.WIDTH_B, SCR.HEIGHT,]
     for plane -> buf
         raw.clear(plane, 0, SCR.SIZE-SCR.HEADER*SCR.WIDTH_B)
     .
@@ -58,11 +74,13 @@ def get_group(x: int, y: int, pl: int): int
 
 def set_group(x: int, y: int, pl: int, v: int): None
     if not in_bounds(x, y); <-;.
+    update_region(x, y)
     buf[pl][y * SCR.WIDTH_B + x // 8] = v
 .
 
 def paint_group(x: int, y: int, pl: int, b: int, m: bool): None
     if not in_bounds(x, y); <-;.
+    update_region(x, y)
     i = y * SCR.WIDTH_B + x // 8
     if m;  buf[pl][i] |= b
     .else; buf[pl][i] &=~b
@@ -96,13 +114,15 @@ def set_icon(icon: int, v: int): None
 def apply: None
     global oldbuf
     global buf
+    global region
     for plane at i -> [SCR.ENUM.SELECT.PLANE0, SCR.ENUM.SELECT.PLANE1,]
-        raw.apply(calc.write, SCR.SELECT, SCR.BUFFER, SCR.WIDTH_B, SCR.TRUE_WIDTH_B, SCR.HEIGHT, SCR.HEADER, buf[i], (oldbuf[i] if oldbuf else None), plane)
+        raw.apply(calc.write, SCR.SELECT, SCR.BUFFER, SCR.WIDTH_B, SCR.TRUE_WIDTH_B, SCR.HEIGHT, SCR.HEADER, buf[i], (oldbuf[i] if oldbuf else None), plane, *region)
     .
     oldbuf = [
         buf[0][0:],
         buf[1][0:],
     ]
+    region = [SCR.WIDTH_B, SCR.HEIGHT, 0, 0,]
 .
 
 def apply_icons: None

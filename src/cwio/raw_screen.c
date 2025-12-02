@@ -53,6 +53,10 @@ static mp_obj_t apply(size_t n_args, const mp_obj_t *args) {
     mp_obj_t buffer             = args[7];
     mp_obj_t oldbuffer          = args[8];
     int plane                   = INT_ARG(9);
+    int start_x                 = INT_ARG(10);
+    int start_y                 = INT_ARG(11);
+    int end_x                   = INT_ARG(12);
+    int end_y                   = INT_ARG(13);
     bool oldbuf_none            = oldbuffer == mp_const_none;
     mp_buffer_info_t bufinfo;
     mp_buffer_info_t oldbufinfo;
@@ -77,8 +81,8 @@ static mp_obj_t apply(size_t n_args, const mp_obj_t *args) {
             }
         }
     }
-    for (int y = 0; y < const_height; y++) {
-        for (int x = 0; x < const_width_b; x++) {
+    for (int y = start_y; y <= end_y; y++) {
+        for (int x = start_x; x < end_x; x++) {
             int i = y * const_width_b + x;
             if (oldbuf_none || (oldbuf[i] != buf[i])) {
                 WRITE(
@@ -90,7 +94,7 @@ static mp_obj_t apply(size_t n_args, const mp_obj_t *args) {
     }
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(apply_obj, 10, 10, apply);
+static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(apply_obj, 14, 14, apply);
 
 static mp_obj_t image(size_t n_args, const mp_obj_t *args) {
     mp_obj_t paintargs[5];
